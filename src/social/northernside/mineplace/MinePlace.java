@@ -3,6 +3,7 @@ package social.northernside.mineplace;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import social.northernside.mineplace.commands.PingCommand;
 import social.northernside.mineplace.listeners.*;
 
 public class MinePlace extends JavaPlugin {
@@ -19,6 +20,10 @@ public class MinePlace extends JavaPlugin {
         pm.registerEvents(new PlayerJoinListener(), this);
         pm.registerEvents(new WeatherChangeListener(), this);
         pm.registerEvents(new PlayerDropItemListener(), this);
+        pm.registerEvents(new AsyncPlayerChatListener(), this);
+        pm.registerEvents(new PlayerQuitListener(), this);
+
+        getCommand("ping").setExecutor(new PingCommand());
     }
 
     @Override
