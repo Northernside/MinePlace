@@ -7,8 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.scheduler.BukkitRunnable;
-import social.northernside.mineplace.MinePlace;
 import social.northernside.mineplace.utils.InventoryPages;
 import social.northernside.mineplace.utils.LabyModRPC;
 
@@ -16,15 +14,12 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 69, 0.5));
-                player.setGameMode(GameMode.CREATIVE);
-                player.setFlying(true);
-                InventoryPages.changePage(0, player.getInventory());
-            }
-        }.runTaskLater(MinePlace.getInstance(), 100);
+
+        player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 69, 0.5));
+        player.setGameMode(GameMode.CREATIVE);
+        player.setFlying(true);
+
+        InventoryPages.changePage(0, player.getInventory());
         LabyModRPC.setRPC(player);
     }
 }

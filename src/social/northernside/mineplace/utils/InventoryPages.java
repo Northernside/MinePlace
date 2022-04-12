@@ -16,6 +16,7 @@ public class InventoryPages {
                 ItemMeta nAMetaP0 = nArrowP0.getItemMeta();
                 nAMetaP0.setDisplayName("§8» §7Next");
                 nArrowP0.setItemMeta(nAMetaP0);
+
                 pInv.setItem(0, new Wool(DyeColor.WHITE).toItemStack(1));
                 pInv.setItem(1, new Wool(DyeColor.SILVER).toItemStack(1));
                 pInv.setItem(2, new Wool(DyeColor.GRAY).toItemStack(1));

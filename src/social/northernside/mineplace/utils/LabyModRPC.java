@@ -11,6 +11,7 @@ public class LabyModRPC {
     public static void setRPC(Player player) {
         starttimes.put(player, Long.valueOf(System.currentTimeMillis()));
         String gamemodeName = "MinePlace";
+
         JsonObject obj = new JsonObject();
         obj.addProperty("hasGame", "true");
         obj.addProperty("game_mode", gamemodeName);

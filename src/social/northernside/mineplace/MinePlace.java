@@ -11,8 +11,8 @@ public class MinePlace extends JavaPlugin {
     @Override
     public void onEnable() {
         MinePlace.instance = this;
+
         PluginManager pm = Bukkit.getPluginManager();
-        getServer().getMessenger().registerIncomingPluginChannel(this, "labymod3:main", new LabyModListener());
         pm.registerEvents(new BlockBreakListener(), this);
         pm.registerEvents(new BlockPlaceListener(), this);
         pm.registerEvents(new PlayerInteractListener(), this);
@@ -22,9 +22,7 @@ public class MinePlace extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
-
-    }
+    public void onDisable() {}
 
     public static MinePlace getInstance() {
         return instance;
