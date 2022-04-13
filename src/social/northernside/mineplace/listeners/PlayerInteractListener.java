@@ -33,8 +33,8 @@ public class PlayerInteractListener implements Listener {
                     Long time = System.currentTimeMillis();
                     Long lastPlace = (cooldowns.get(player.getUniqueId()) == null) ? 0L : cooldowns.get(player.getUniqueId());
 
-                    if (lastPlace + 15 * 1000 > time) {
-                        ActionbarTitle.sendTitle(player, "", "§cWait another " + (15 - (time / 1000 - lastPlace / 1000)) + " seconds!", 2, 7, 2);
+                    if (lastPlace + 5 * 1000 > time) {
+                        ActionbarTitle.sendTitle(player, "", "§cWait another " + (5 - (time / 1000 - lastPlace / 1000)) + " seconds!", 2, 7, 2);
                     } else {
                         cooldowns.remove(player.getUniqueId());
                         if (event.getClickedBlock().getLocation().getY() == 0) {
