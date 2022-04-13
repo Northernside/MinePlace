@@ -27,17 +27,18 @@ public class PlayerInteractListener implements Listener {
         Action action = event.getAction();
         ItemStack item = event.getItem();
 
-        if (item != null) {
-            if (action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
-                if (item.getType() != Material.ARROW) {
+        if(item != null) {
+            if(action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
+                if(item.getType() != Material.ARROW) {
                     Long time = System.currentTimeMillis();
-                    Long lastPlace = (cooldowns.get(player.getUniqueId()) == null) ? 0L : cooldowns.get(player.getUniqueId());
+                    Long nextPlace = (cooldowns.get(player.getUniqueId()) == null) ? 0L : cooldowns.get(player.getUniqueId());
 
-                    if (lastPlace + 5 * 1000 > time) {
-                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§cWait another " + (5 - (time / 1000 - lastPlace / 1000)) + " seconds!"));
+                    if(nextPlace > time) {
+                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                                TextComponent.fromLegacyText("§cWait another " + (5 - (time / 1000 - nextPlace / 1000)) + " seconds!"));
                     } else {
                         cooldowns.remove(player.getUniqueId());
-                        if (event.getClickedBlock().getLocation().getY() == 0 && event.getItem().getType().equals(Material.WOOL)) {
+                        if(event.getClickedBlock().getLocation().getY() == 0 && event.getItem().getType().equals(Material.WOOL)) {
                             Block clickedBlock = event.getClickedBlock();
                             clickedBlock.setType(Material.WOOL);
 
@@ -45,22 +46,22 @@ public class PlayerInteractListener implements Listener {
                             blockState.setData(new Wool(((Wool) item.getData()).getColor()));
                             blockState.update();
 
-                            cooldowns.put(player.getUniqueId(), time);
+                            cooldowns.put(player.getUniqueId(), time + 5 * 1000);
                         }
                     }
                 }
             }
 
             String itemDP = item.getItemMeta().getDisplayName();
-            if (itemDP != null) {
+            if(itemDP != null) {
                 Inventory pInv = player.getInventory();
-                if (itemDP.equals("§8» §7Next")) {
+                if(itemDP.equals("§8» §7Next")) {
                     InventoryPages.changePage(1, pInv);
-                } else if (itemDP.equals("§8»§r §7Next")) {
+                } else if(itemDP.equals("§8»§r §7Next")) {
                     InventoryPages.changePage(2, pInv);
-                } else if (itemDP.equals("§8« §7Back")) {
+                } else if(itemDP.equals("§8« §7Back")) {
                     InventoryPages.changePage(0, pInv);
-                } else if (itemDP.equals("§8«§r §7Back")) {
+                } else if(itemDP.equals("§8«§r §7Back")) {
                     InventoryPages.changePage(1, pInv);
                 }
             }
