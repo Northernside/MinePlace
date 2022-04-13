@@ -1,5 +1,6 @@
 package social.northernside.mineplace.listeners;
 
+import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -24,6 +25,9 @@ public class PlayerJoinListener implements Listener {
         TabUtils.setTab(player, "&e&lMine&6&lPlace", " &7Made with &c❤ &7by Northernside ");
         ScoreboardProvider.getInstance().setScoreboard();
 
+        JsonObject object = new JsonObject();
+        object.addProperty("url", "https://raw.githubusercontent.com/Northernside/MinePlace/main/labymod-header.png");
+        LabyModProtocol.sendLabyModMessage(player, "server_banner", object);
 
         for (Player gop : Bukkit.getOnlinePlayers()) {
             if (ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()) != null) {
