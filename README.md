@@ -5,7 +5,7 @@
 <br>
 <hr>
 
-MinePlace offers a completely new gaming experience in Minecraft. As a parody of [r/place](https://reddit.com/), a world-renowned reddit community project, this project offers endless possibilities to immortalise one's creativity in MinePlace, in addition to many varied features such as joining game teams or a large number of colours.
+MinePlace offers a completely new gaming experience in Minecraft. As a parody of [r/place](https://reddit.com/r/place), a world-renowned reddit community project, this project offers endless possibilities to immortalise one's creativity in MinePlace, in addition to many varied features such as joining game teams or a large number of colours.
 
 ![2022-04-13_00 36 20](https://user-images.githubusercontent.com/56507045/163065965-6ca47306-c298-4e63-95b1-58e703157f87.png)
 
