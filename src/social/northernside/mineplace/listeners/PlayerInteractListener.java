@@ -1,5 +1,6 @@
 package social.northernside.mineplace.listeners;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -11,7 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
-import social.northernside.mineplace.utils.ActionbarTitle;
+import social.northernside.mineplace.utils.ActionBarUtils;
 import social.northernside.mineplace.utils.InventoryPages;
 
 import java.util.HashMap;
@@ -34,10 +35,11 @@ public class PlayerInteractListener implements Listener {
                     Long lastPlace = (cooldowns.get(player.getUniqueId()) == null) ? 0L : cooldowns.get(player.getUniqueId());
 
                     if (lastPlace + 5 * 1000 > time) {
-                        ActionbarTitle.sendTitle(player, "", "§cWait another " + (5 - (time / 1000 - lastPlace / 1000)) + " seconds!", 2, 7, 2);
+                        ActionBarUtils actionBar = new ActionBarUtils("§cWait another " + (5 - (time / 1000 - lastPlace / 1000)) + " seconds!");
+                        actionBar.sendToPlayer(player);
                     } else {
                         cooldowns.remove(player.getUniqueId());
-                        if (event.getClickedBlock().getLocation().getY() == 0) {
+                        if (event.getClickedBlock().getLocation().getY() == 0 && event.getItem().getType().equals(Material.WOOL)) {
                             Block clickedBlock = event.getClickedBlock();
                             clickedBlock.setType(Material.WOOL);
 

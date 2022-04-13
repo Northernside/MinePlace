@@ -18,4 +18,4 @@ Whether alone or as a duo, in one or many colours, in the morning or in the even
 Contributions are always welcome! Help make MinePlace a wonderful place to be! 🌸
 
 ## Contact
-So many possibilities that questions have arisen? These should not remain unanswered! Feel free to create an issue directly in the repository! :smile:
+So many possibilities that questions have arisen? These should not remain unanswered! Feel free to create an issue directly in the repository or send us a mail at [contact@mineplace.world](mailto:contact@mineplace.world)! :smile:
