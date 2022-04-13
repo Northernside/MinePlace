@@ -1,6 +1,7 @@
 package social.northernside.mineplace.listeners;
 
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -12,7 +13,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
-import social.northernside.mineplace.utils.ActionBarUtils;
 import social.northernside.mineplace.utils.InventoryPages;
 
 import java.util.HashMap;
@@ -35,8 +35,7 @@ public class PlayerInteractListener implements Listener {
                     Long lastPlace = (cooldowns.get(player.getUniqueId()) == null) ? 0L : cooldowns.get(player.getUniqueId());
 
                     if (lastPlace + 5 * 1000 > time) {
-                        ActionBarUtils actionBar = new ActionBarUtils("§cWait another " + (5 - (time / 1000 - lastPlace / 1000)) + " seconds!");
-                        actionBar.sendToPlayer(player);
+                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("§cWait another " + (5 - (time / 1000 - lastPlace / 1000)) + " seconds!"));
                     } else {
                         cooldowns.remove(player.getUniqueId());
                         if (event.getClickedBlock().getLocation().getY() == 0 && event.getItem().getType().equals(Material.WOOL)) {

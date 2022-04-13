@@ -1,6 +1,5 @@
 package social.northernside.mineplace.commands;
 
-import jdk.nashorn.internal.runtime.regexp.joni.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -11,7 +10,7 @@ import social.northernside.mineplace.utils.ConfigHandler;
 
 import java.util.UUID;
 
-public class CreateTeamCommand implements CommandExecutor {
+public class TeamCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (commandSender instanceof Player) {
