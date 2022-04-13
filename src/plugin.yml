@@ -6,3 +6,5 @@ main: social.northernside.mineplace.MinePlace
 commands:
   ping:
     description: Display your network latency
+  team:
+    description: Manage teams
