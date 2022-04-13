@@ -6,6 +6,7 @@ import org.bukkit.craftbukkit.v1_8_R3.util.CraftChatMessage;
 import org.bukkit.entity.Player;
 
 public class ActionbarTitle {
+
     public static void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         PacketPlayOutTitle times;
 

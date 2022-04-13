@@ -1,4 +1,5 @@
 package social.northernside.mineplace.utils;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,13 +9,14 @@ import java.io.File;
 import java.io.IOException;
 
 public class ConfigHandler {
+
     private static ConfigHandler instance;
     private String pluginDirPath = MinePlace.getInstance().getDataFolder().getPath();
+
     public static ConfigHandler getInstance() {
         if (ConfigHandler.instance == null) {
             ConfigHandler.instance = new ConfigHandler();
         }
-
         return ConfigHandler.instance;
     }
 

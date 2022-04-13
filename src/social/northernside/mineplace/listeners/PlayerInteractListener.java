@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class PlayerInteractListener implements Listener {
+
     private HashMap<UUID, Long> cooldowns = new HashMap<UUID, Long>();
 
     @EventHandler

@@ -11,6 +11,7 @@ import social.northernside.mineplace.utils.InventoryPages;
 import social.northernside.mineplace.utils.LabyModRPC;
 
 public class PlayerJoinListener implements Listener {
+
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();

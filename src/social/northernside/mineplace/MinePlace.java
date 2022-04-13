@@ -12,17 +12,18 @@ public class MinePlace extends JavaPlugin {
     public void onEnable() {
         MinePlace.instance = this;
 
-        PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(new BlockBreakListener(), this);
-        pm.registerEvents(new BlockPlaceListener(), this);
-        pm.registerEvents(new PlayerInteractListener(), this);
-        pm.registerEvents(new PlayerJoinListener(), this);
-        pm.registerEvents(new WeatherChangeListener(), this);
-        pm.registerEvents(new PlayerDropItemListener(), this);
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        pluginManager.registerEvents(new BlockBreakListener(), this);
+        pluginManager.registerEvents(new BlockPlaceListener(), this);
+        pluginManager.registerEvents(new PlayerInteractListener(), this);
+        pluginManager.registerEvents(new PlayerJoinListener(), this);
+        pluginManager.registerEvents(new WeatherChangeListener(), this);
+        pluginManager.registerEvents(new PlayerDropItemListener(), this);
     }
 
     @Override
-    public void onDisable() {}
+    public void onDisable() {
+    }
 
     public static MinePlace getInstance() {
         return instance;
