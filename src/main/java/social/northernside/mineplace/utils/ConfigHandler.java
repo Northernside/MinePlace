@@ -16,6 +16,7 @@ public class ConfigHandler {
         if (ConfigHandler.instance == null) {
             ConfigHandler.instance = new ConfigHandler();
         }
+        
         return ConfigHandler.instance;
     }
 
@@ -90,6 +91,7 @@ public class ConfigHandler {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        
         removeUserFile(pUUID);
     }
 
@@ -111,6 +113,7 @@ public class ConfigHandler {
     private void setTeamMemberRole(String teamName, UUID pUUID, String role) {
         File file = new File(pluginDirPath, "teams/" + teamName + ".yml");
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        
         cfg.createSection("members");
         ConfigurationSection membersSection = cfg.getConfigurationSection("members");
         membersSection.set(String.valueOf(pUUID), role);
