@@ -11,11 +11,12 @@ import java.util.UUID;
 public class ConfigHandler {
     private static ConfigHandler instance;
     private String pluginDirPath = MinePlace.getInstance().getDataFolder().getPath();
+
     public static ConfigHandler getInstance() {
         if (ConfigHandler.instance == null) {
             ConfigHandler.instance = new ConfigHandler();
         }
-
+        
         return ConfigHandler.instance;
     }
 
@@ -26,7 +27,6 @@ public class ConfigHandler {
 
     public void deleteTeam(String teamName) {
         File file = new File(pluginDirPath, "teams/" + teamName + ".yml");
-
         file.delete();
     }
 
@@ -66,7 +66,6 @@ public class ConfigHandler {
 
     private void removeUserFile(UUID pUUID) {
         File fileUser = new File(pluginDirPath, "users/" + pUUID + ".yml");
-
         fileUser.delete();
     }
 
@@ -92,7 +91,7 @@ public class ConfigHandler {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+        
         removeUserFile(pUUID);
     }
 
@@ -114,6 +113,7 @@ public class ConfigHandler {
     private void setTeamMemberRole(String teamName, UUID pUUID, String role) {
         File file = new File(pluginDirPath, "teams/" + teamName + ".yml");
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        
         cfg.createSection("members");
         ConfigurationSection membersSection = cfg.getConfigurationSection("members");
         membersSection.set(String.valueOf(pUUID), role);

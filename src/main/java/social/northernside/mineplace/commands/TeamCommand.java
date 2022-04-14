@@ -37,8 +37,9 @@ public class TeamCommand implements CommandExecutor {
                         if (ConfigHandler.getInstance().getTeamMemberRole(teamName, player.getUniqueId()).equalsIgnoreCase("owner")) {
                             ConfigHandler.getInstance().deleteTeam(teamName);
                             player.sendMessage("§cYou deleted your team.");
-                        }  else {
-                            player.sendMessage("§cYou're not the team owner." + ConfigHandler.getInstance().getTeamMemberRole(teamName, player.getUniqueId()));
+                        } else {
+                            player.sendMessage(
+                                    "§cYou're not the team owner." + ConfigHandler.getInstance().getTeamMemberRole(teamName, player.getUniqueId()));
                         }
                     } else {
                         player.sendMessage("§cYou're not in a team.");
@@ -48,7 +49,8 @@ public class TeamCommand implements CommandExecutor {
                         if (Bukkit.getPlayer(args[1]) != null) {
                             if (Bukkit.getPlayer(args[1]) != player) {
                                 Player targetPlayer = Bukkit.getPlayer(args[1]);
-                                targetPlayer.sendMessage("§e" + player.getName() + " §ainvited you to join team §e#" + teamName + "\n§aJoin them via §e/team join #" + teamName);
+                                targetPlayer.sendMessage(
+                                        "§e" + player.getName() + " §ainvited you to join team §e#" + teamName + "\n§aJoin them via §e/team join #" + teamName);
                             } else {
                                 player.sendMessage("§cYou can't invite yourself.");
                             }
@@ -168,6 +170,8 @@ public class TeamCommand implements CommandExecutor {
                     } else {
                         player.sendMessage("§cYou're not in a team.");
                     }
+                } else {
+                    player.sendMessage("§cUsage: /team <create/invite/ban/unban/leave/kick/promote/demote>");
                 }
             } else {
                 player.sendMessage("§e/team create <name>");
