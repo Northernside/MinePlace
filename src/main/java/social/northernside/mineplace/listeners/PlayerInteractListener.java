@@ -33,7 +33,7 @@ public class PlayerInteractListener implements Listener {
                     Long time = System.currentTimeMillis();
                     Long nextPlace = (cooldowns.get(player.getUniqueId()) == null) ? 0L : cooldowns.get(player.getUniqueId());
 
-                    if(nextPlace + 5 * 1000 > time) {
+                    if(nextPlace > time) {
                         player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                                 TextComponent.fromLegacyText("§cWait another " + (5 - (time / 1000 - nextPlace / 1000)) + " seconds!"));
                     } else {
@@ -46,7 +46,7 @@ public class PlayerInteractListener implements Listener {
                             blockState.setData(new Wool(((Wool) item.getData()).getColor()));
                             blockState.update();
 
-                            cooldowns.put(player.getUniqueId(), time);
+                            cooldowns.put(player.getUniqueId(), time + 5 * 1000);
                         }
                     }
                 }
