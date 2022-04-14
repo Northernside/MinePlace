@@ -1,0 +1,10 @@
+name: MinePlace
+version: 1.0
+author: Northernside
+main: social.northernside.mineplace.MinePlace
+
+commands:
+  ping:
+    description: Display your network latency
+  team:
+    description: Manage teams
