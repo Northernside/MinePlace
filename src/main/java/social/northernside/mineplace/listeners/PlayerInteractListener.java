@@ -2,9 +2,13 @@ package social.northernside.mineplace.listeners;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,10 +20,12 @@ import org.bukkit.material.Wool;
 import social.northernside.mineplace.utils.InventoryPages;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 public class PlayerInteractListener implements Listener {
-    private HashMap<UUID, Long> cooldowns = new HashMap<UUID, Long>();
+    public static HashMap<UUID, Long> cooldownMap = new HashMap<UUID, Long>();
 
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
@@ -31,22 +37,40 @@ public class PlayerInteractListener implements Listener {
             if(action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
                 if(item.getType() != Material.ARROW) {
                     Long time = System.currentTimeMillis();
-                    Long nextPlace = (cooldowns.get(player.getUniqueId()) == null) ? 0L : cooldowns.get(player.getUniqueId());
+                    Long nextPlace = (cooldownMap.get(player.getUniqueId()) == null) ? 0L : cooldownMap.get(player.getUniqueId());
+                    if(nextPlace + 5 * 1000 < time) {
+                        if (!cooldownMap.containsKey(player.getUniqueId())) {
+                            if(event.getClickedBlock().getLocation().getY() == 0 && event.getItem().getType().equals(Material.WOOL)) {
+                                Block clickedBlock = event.getClickedBlock();
+                                clickedBlock.setType(Material.WOOL);
 
-                    if(nextPlace + 5 * 1000 > time) {
-                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                                TextComponent.fromLegacyText("§cWait another " + (5 - (time / 1000 - nextPlace / 1000)) + " seconds!"));
-                    } else {
-                        cooldowns.remove(player.getUniqueId());
-                        if(event.getClickedBlock().getLocation().getY() == 0 && event.getItem().getType().equals(Material.WOOL)) {
-                            Block clickedBlock = event.getClickedBlock();
-                            clickedBlock.setType(Material.WOOL);
+                                BlockState blockState = clickedBlock.getState();
+                                blockState.setData(new Wool(((Wool) item.getData()).getColor()));
+                                blockState.update();
 
-                            BlockState blockState = clickedBlock.getState();
-                            blockState.setData(new Wool(((Wool) item.getData()).getColor()));
-                            blockState.update();
+                                cooldownMap.put(player.getUniqueId(), time);
+                                BossBar bossBar = Bukkit.createBossBar("Cooldown", BarColor.BLUE, BarStyle.SEGMENTED_10);
+                                bossBar.addPlayer(player);
+                                bossBar.setProgress(1);
+                                Timer timer = new Timer();
+                                timer.schedule(new TimerTask() {
+                                    final StringBuilder builder = new StringBuilder();
+                                    double cooldown = 5;
+                                    int point = 0;
 
-                            cooldowns.put(player.getUniqueId(), time);
+                                    @Override
+                                    public void run() {
+                                        point++;
+                                        cooldown -= 0.5D;
+                                        bossBar.setProgress((cooldown / 10) * 2);
+                                        if (cooldown == 0D) {
+                                            bossBar.removePlayer(player);
+                                            cooldownMap.remove(player.getUniqueId(), time);
+                                            timer.cancel();
+                                        }
+                                    }
+                                }, 500, 500);
+                            }
                         }
                     }
                 }

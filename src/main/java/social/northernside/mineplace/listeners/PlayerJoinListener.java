@@ -29,14 +29,18 @@ public class PlayerJoinListener implements Listener {
         object.addProperty("url", "https://raw.githubusercontent.com/Northernside/MinePlace/main/labymod-header.png");
         LabyModProtocol.sendLabyModMessage(player, "server_banner", object);
 
-        for (Player gop : Bukkit.getOnlinePlayers()) {
-            if (ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()) != null) {
-                SubtitleUtils.setSubtitle(gop, player.getUniqueId(), "#" + ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()));
-            }
+        if (ConfigHandler.getInstance().existsTeam(ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()))) {
+            for (Player gop : Bukkit.getOnlinePlayers()) {
+                if (ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()) != null) {
+                    SubtitleUtils.setSubtitle(gop, player.getUniqueId(), "#" + ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()));
+                }
 
-            if (ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()) != null) {
-                SubtitleUtils.setSubtitle(player, gop.getUniqueId(), "#" + ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()));
+                if (ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()) != null) {
+                    SubtitleUtils.setSubtitle(player, gop.getUniqueId(), "#" + ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()));
+                }
             }
+        } else if(ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()) != null) {
+            ConfigHandler.getInstance().deleteUserFile(player.getUniqueId());
         }
     }
 }
