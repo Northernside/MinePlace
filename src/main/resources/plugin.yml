@@ -1,6 +1,6 @@
 name: MinePlace
-version: 1.0
-author: Northernside
+version: 1.1
+author: Northernside, unordentlich, Zeichenfolge, InspectorRex
 main: social.northernside.mineplace.MinePlace
 
 commands:
