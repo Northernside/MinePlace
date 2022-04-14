@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import social.northernside.mineplace.MinePlace;
 import social.northernside.mineplace.utils.ConfigHandler;
 
 import java.util.UUID;
@@ -218,6 +219,9 @@ public class TeamCommand implements CommandExecutor {
             player.sendMessage("§e/team unban <username>");
             player.sendMessage("§e/team promote <username>");
             player.sendMessage("§e/team demote <username>");
+            if (!MinePlace.getInstance().usersWithLM.contains(player.getUniqueId())) {
+                player.sendMessage("§7Please use LabyMod (https://labymod.net/download) to make our team system fully functional for your client.");
+            }
 
             return true;
         }

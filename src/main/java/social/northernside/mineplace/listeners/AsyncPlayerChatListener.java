@@ -16,12 +16,12 @@ public class AsyncPlayerChatListener implements Listener {
         String message = event.getMessage().replace("%", "%%");
         Player player = event.getPlayer();
         if (event.getPlayer().isOp()) {
-            event.setFormat("§4Administrator §8» §c" + player.getName() + " §8» §7" + message.replace('&', '§'));
+            event.setFormat("§4Admin §8» §c" + player.getName() + " §8» §7" + message.replace('&', '§'));
         } else {
             Long time = System.currentTimeMillis();
             Long nextMSG = (cooldownMap.get(player.getUniqueId()) == null) ? 0L : cooldownMap.get(player.getUniqueId());
 
-            if(nextMSG + 0.8 * 1000 > time) {
+            if (nextMSG + 0.8 * 1000 > time) {
                 player.sendMessage("§cDo not spam.");
                 event.setCancelled(true);
             } else {

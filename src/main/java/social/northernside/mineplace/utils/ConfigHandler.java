@@ -48,7 +48,7 @@ public class ConfigHandler {
         File file = new File(pluginDirPath, "users/" + pUUID + ".yml");
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-        if(cfg.getConfigurationSection("team") == null) {
+        if (cfg.getConfigurationSection("team") == null) {
             cfg.createSection("team");
         }
 
@@ -115,7 +115,7 @@ public class ConfigHandler {
         File file = new File(pluginDirPath, "teams/" + teamName + ".yml");
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
 
-        if(cfg.getConfigurationSection("members") == null) {
+        if (cfg.getConfigurationSection("members") == null) {
             cfg.createSection("members");
         }
 

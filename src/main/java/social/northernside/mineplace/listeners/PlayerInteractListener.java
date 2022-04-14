@@ -1,7 +1,5 @@
 package social.northernside.mineplace.listeners;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -33,14 +31,14 @@ public class PlayerInteractListener implements Listener {
         Action action = event.getAction();
         ItemStack item = event.getItem();
 
-        if(item != null) {
-            if(action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
-                if(item.getType() != Material.ARROW) {
+        if (item != null) {
+            if (action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
+                if (item.getType() != Material.ARROW) {
                     Long time = System.currentTimeMillis();
                     Long nextPlace = (cooldownMap.get(player.getUniqueId()) == null) ? 0L : cooldownMap.get(player.getUniqueId());
-                    if(nextPlace + 5 * 1000 < time) {
+                    if (nextPlace + 5 * 1000 < time) {
                         if (!cooldownMap.containsKey(player.getUniqueId())) {
-                            if(event.getClickedBlock().getLocation().getY() == 0 && event.getItem().getType().equals(Material.WOOL)) {
+                            if (event.getClickedBlock().getLocation().getY() == 0 && event.getItem().getType().equals(Material.WOOL)) {
                                 Block clickedBlock = event.getClickedBlock();
                                 clickedBlock.setType(Material.WOOL);
 
@@ -49,7 +47,7 @@ public class PlayerInteractListener implements Listener {
                                 blockState.update();
 
                                 cooldownMap.put(player.getUniqueId(), time);
-                                BossBar bossBar = Bukkit.createBossBar("Cooldown", BarColor.BLUE, BarStyle.SEGMENTED_10);
+                                BossBar bossBar = Bukkit.createBossBar("§cPlease wait 5 seconds.", BarColor.BLUE, BarStyle.SEGMENTED_10);
                                 bossBar.addPlayer(player);
                                 bossBar.setProgress(1);
                                 Timer timer = new Timer();
@@ -63,6 +61,10 @@ public class PlayerInteractListener implements Listener {
                                         point++;
                                         cooldown -= 0.5D;
                                         bossBar.setProgress((cooldown / 10) * 2);
+
+                                        if (cooldown % 1 == 0)
+                                            bossBar.setTitle("§cPlease wait " + (int) cooldown + " second" + ((int) cooldown != 1 ? "s." : "."));
+
                                         if (cooldown == 0D) {
                                             bossBar.removePlayer(player);
                                             cooldownMap.remove(player.getUniqueId(), time);
@@ -77,15 +79,15 @@ public class PlayerInteractListener implements Listener {
             }
 
             String itemDP = item.getItemMeta().getDisplayName();
-            if(itemDP != null) {
+            if (itemDP != null) {
                 Inventory pInv = player.getInventory();
-                if(itemDP.equals("§8» §7Next")) {
+                if (itemDP.equals("§8» §7Next")) {
                     InventoryPages.changePage(1, pInv);
-                } else if(itemDP.equals("§8»§r §7Next")) {
+                } else if (itemDP.equals("§8»§r §7Next")) {
                     InventoryPages.changePage(2, pInv);
-                } else if(itemDP.equals("§8« §7Back")) {
+                } else if (itemDP.equals("§8« §7Back")) {
                     InventoryPages.changePage(0, pInv);
-                } else if(itemDP.equals("§8«§r §7Back")) {
+                } else if (itemDP.equals("§8«§r §7Back")) {
                     InventoryPages.changePage(1, pInv);
                 }
             }

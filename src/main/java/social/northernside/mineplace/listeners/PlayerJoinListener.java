@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import social.northernside.mineplace.MinePlace;
 import social.northernside.mineplace.utils.*;
 
 public class PlayerJoinListener implements Listener {
@@ -32,15 +34,23 @@ public class PlayerJoinListener implements Listener {
         if (ConfigHandler.getInstance().existsTeam(ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()))) {
             for (Player gop : Bukkit.getOnlinePlayers()) {
                 if (ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()) != null) {
-                    SubtitleUtils.setSubtitle(gop, player.getUniqueId(), "#" + ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()));
+                    SubtitleUtils.setSubtitle(gop, player.getUniqueId(), "§e#" + ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()));
                 }
 
                 if (ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()) != null) {
-                    SubtitleUtils.setSubtitle(player, gop.getUniqueId(), "#" + ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()));
+                    SubtitleUtils.setSubtitle(player, gop.getUniqueId(), "§e#" + ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()));
                 }
             }
-        } else if(ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()) != null) {
+        } else if (ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()) != null) {
             ConfigHandler.getInstance().deleteUserFile(player.getUniqueId());
         }
+
+        new BukkitRunnable() {
+            public void run() {
+                if (!MinePlace.getInstance().usersWithLM.contains(player.getUniqueId())) {
+                    player.sendMessage("§7Hey, we've detected that you're not using LabyMod.\nMight wanna try it? Download it via https://labymod.net/download\n\nWe've made great use of the LabyMod API which allows us to give all LabyMod users a better experience while playing on MinePlace.\nFor example: Our team system is only useful when our players are using LabyMod because your team name will be visible right below your ingame name.");
+                }
+            }
+        }.runTaskLater(MinePlace.getInstance(), 80);
     }
 }
