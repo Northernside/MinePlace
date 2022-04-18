@@ -15,8 +15,9 @@ import java.nio.charset.Charset;
 public class LabyModProtocol {
     /**
      * Send a message to LabyMod
-     * @param player Minecraft Client
-     * @param key LabyMod message key
+     *
+     * @param player         Minecraft Client
+     * @param key            LabyMod message key
      * @param messageContent json object content
      */
     public static void sendLabyModMessage(Player player, String key, JsonElement messageContent) {

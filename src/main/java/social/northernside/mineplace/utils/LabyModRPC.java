@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 
 public class LabyModRPC {
+
     private static HashMap<Player, Long> starttimes = new HashMap<>();
 
     public static void setRPC(Player player) {

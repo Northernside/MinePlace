@@ -8,9 +8,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 
 public class InventoryPages {
+
     public static void changePage(int page, Inventory pInv) {
         pInv.clear();
-        switch(page) {
+        switch (page) {
             case 0:
                 ItemStack nArrowP0 = new ItemStack(Material.ARROW, 1);
                 ItemMeta nAMetaP0 = nArrowP0.getItemMeta();
