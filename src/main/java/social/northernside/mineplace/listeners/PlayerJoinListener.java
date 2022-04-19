@@ -28,7 +28,7 @@ public class PlayerJoinListener implements Listener {
         ScoreboardProvider.getInstance().setScoreboard();
 
         JsonObject object = new JsonObject();
-        object.addProperty("url", "https://raw.githubusercontent.com/Northernside/MinePlace/main/labymod-header.png");
+        object.addProperty("url", "https://raw.githubusercontent.com/Northernside/MinePlace/main/.github/raw/header.png");
         LabyModProtocol.sendLabyModMessage(player, "server_banner", object);
 
         if (ConfigHandler.getInstance().existsTeam(ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId()))) {
