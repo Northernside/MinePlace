@@ -3,6 +3,7 @@ package social.northernside.mineplace;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import social.northernside.mineplace.commands.ModToolCommand;
 import social.northernside.mineplace.commands.TeamCommand;
 import social.northernside.mineplace.commands.PingCommand;
 import social.northernside.mineplace.listeners.*;
@@ -32,6 +33,7 @@ public class MinePlace extends JavaPlugin {
 
         getCommand("ping").setExecutor(new PingCommand());
         getCommand("team").setExecutor(new TeamCommand());
+        getCommand("modtool").setExecutor(new ModToolCommand());
     }
 
     @Override

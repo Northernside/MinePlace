@@ -1,6 +1,7 @@
 package social.northernside.mineplace.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -24,7 +25,8 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 public class PlayerInteractListener implements Listener {
-    public static HashMap<UUID, Long> cooldownMap = new HashMap<UUID, Long>();
+    public static HashMap<UUID, Long> cooldownMap = new HashMap<>();
+    public static HashMap<Location, UUID> lastPlaced = new HashMap<>();
 
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
@@ -35,6 +37,7 @@ public class PlayerInteractListener implements Listener {
         if (item.getType() == Material.WATER_BUCKET || item.getType() == Material.LAVA_BUCKET) event.setUseItemInHand(Event.Result.DENY);
 
         if (item != null) {
+            Block clickedBlock = event.getClickedBlock();
             if (action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
                 if (item.getType() != Material.ARROW) {
                     Long time = System.currentTimeMillis();
@@ -42,13 +45,13 @@ public class PlayerInteractListener implements Listener {
                     if (nextPlace + 5 * 1000 < time) {
                         if (!cooldownMap.containsKey(player.getUniqueId())) {
                             if (event.getClickedBlock().getLocation().getY() == 0 && event.getItem().getType().equals(Material.WOOL)) {
-                                Block clickedBlock = event.getClickedBlock();
                                 clickedBlock.setType(Material.WOOL);
 
                                 BlockState blockState = clickedBlock.getState();
                                 blockState.setData(new Wool(((Wool) item.getData()).getColor()));
                                 blockState.update();
 
+                                lastPlaced.put(clickedBlock.getLocation(), player.getUniqueId());
                                 cooldownMap.put(player.getUniqueId(), time);
                                 BossBar bossBar = Bukkit.createBossBar("§cPlease wait 5 seconds.", BarColor.BLUE, BarStyle.SEGMENTED_10);
                                 bossBar.addPlayer(player);
@@ -92,7 +95,18 @@ public class PlayerInteractListener implements Listener {
                     InventoryPages.changePage(0, pInv);
                 } else if (itemDP.equals("§8«§r §7Back")) {
                     InventoryPages.changePage(1, pInv);
-                }
+                }/* else if (itemDP.equals("§cCancel")) {
+                    InventoryPages.changePage(0, pInv);
+                } else if (itemDP.equals("§7Censor")) {
+
+                } else if (itemDP.equals("§7Last placed by")) {
+                    if (lastPlaced.get(clickedBlock.getLocation()) != null) {
+                        player.sendMessage("§e" + clickedBlock.getLocation().getX() + ", " + clickedBlock.getLocation().getZ() + " §awas placed by §e" + Bukkit.getOfflinePlayer(lastPlaced.get(clickedBlock.getLocation())).getName() + " (" + lastPlaced.get(clickedBlock.getLocation()) + ")");
+                    } else {
+                        player.sendMessage("§cThis block isn't cached :(");
+                    }
+                }*/
+                // Need to wait for the rank system, else this will be highly exploitable.
             }
         }
     }

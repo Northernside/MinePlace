@@ -12,3 +12,5 @@ commands:
     description: Display your network latency
   team:
     description: Manage teams
+  modtool:
+    description: Secret!

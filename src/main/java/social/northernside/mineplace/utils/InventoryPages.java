@@ -58,6 +58,26 @@ public class InventoryPages {
                 pInv.setItem(0, bArrowP2);
                 pInv.setItem(1, new Wool(DyeColor.PINK).toItemStack(1));
                 break;
+            case 666:
+                ItemStack cancelBtn = new ItemStack(Material.BARRIER, 1);
+                ItemMeta cBMeta = cancelBtn.getItemMeta();
+                cBMeta.setDisplayName("§cCancel");
+                cancelBtn.setItemMeta(cBMeta);
+
+                ItemStack censorTool = new ItemStack(Material.COAL_BLOCK, 1);
+                ItemMeta cTMeta = censorTool.getItemMeta();
+                cTMeta.setDisplayName("§7Censor");
+                censorTool.setItemMeta(cTMeta);
+
+                ItemStack lPBTool = new ItemStack(Material.NAME_TAG, 1);
+                ItemMeta lPBTMeta = lPBTool.getItemMeta();
+                lPBTMeta.setDisplayName("§7Last placed by");
+                lPBTool.setItemMeta(lPBTMeta);
+
+                pInv.setItem(0, cancelBtn);
+                pInv.setItem(3, censorTool);
+                pInv.setItem(5, lPBTool);
+                break;
         }
     }
 }

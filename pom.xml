@@ -28,6 +28,11 @@
             <version>1.18.22</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.azbh111</groupId>
+            <artifactId>craftbukkit-1.12.2</artifactId>
+            <version>R</version>
+        </dependency>
     </dependencies>
 
     <properties>
