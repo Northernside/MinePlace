@@ -19,6 +19,7 @@ public class MultiLanguageProvider {
 
     private static final Gson GSON = new GsonBuilder().setLenient().setPrettyPrinting().create();
     private static final JsonParser PARSER = new JsonParser();
+    private static MultiLanguageProvider instance;
     private final File dir = new File(MinePlace.getInstance().getDataFolder().getPath() + "data/lang/");
     private final File selectedLanguagesFile = new File(dir + "selected.json");
     private final Map<String, Properties> languages = new HashMap<>();
@@ -39,9 +40,14 @@ public class MultiLanguageProvider {
         return selected;
     }
 
+    public String getTranslatedString(Player player, String key) {
+        return languages.get(getLang(player)).get(key) == null ? "Translation not found" :
+                (String) languages.get(getLang(player)).get(key);
+    }
+
     @SneakyThrows(IOException.class)
     public void saveObject() {
-        if(selectedLanguagesFile.delete()) selectedLanguagesFile.createNewFile();
+        if (selectedLanguagesFile.delete()) selectedLanguagesFile.createNewFile();
         FileWriter writer = new FileWriter(selectedLanguagesFile);
         writer.write(GSON.toJson(jsonObject));
         writer.close();
@@ -49,6 +55,7 @@ public class MultiLanguageProvider {
 
     private void loadLanguages() {
         Arrays.stream(Objects.requireNonNull(dir.listFiles())).forEach(file -> {
+            if (!file.getName().split(".")[1].equals("properties")) return;
             Properties properties = new Properties();
             try {
                 properties.load(new FileReader(file));
@@ -57,5 +64,13 @@ public class MultiLanguageProvider {
             }
             languages.put(file.getName(), properties);
         });
+    }
+
+    public static MultiLanguageProvider getInstance() {
+        if (MultiLanguageProvider.instance == null) {
+            MultiLanguageProvider.instance = new MultiLanguageProvider();
+        }
+
+        return MultiLanguageProvider.instance;
     }
 }
