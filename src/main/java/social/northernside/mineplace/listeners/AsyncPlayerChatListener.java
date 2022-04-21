@@ -30,7 +30,7 @@ public class AsyncPlayerChatListener implements Listener {
                 player.sendMessage("§cDo not spam.");
                 event.setCancelled(true);
             } else {
-                event.setFormat("§c5VIP §8» §8" + player.getName() + " §8» §7" + message.replace('&', '§'));
+                event.setFormat("§5VIP §8» §5" + player.getName() + " §8» §7" + message.replace('&', '§'));
                 cooldownMap.put(player.getUniqueId(), time);
             }
         } else {
