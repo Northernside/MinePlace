@@ -55,10 +55,12 @@ public class MultiLanguageProvider {
 
     private void loadLanguages() {
         Arrays.stream(Objects.requireNonNull(dir.listFiles())).forEach(file -> {
-            if (!file.getName().split(".")[1].equals("properties")) return;
+            if (!file.getName().split(".")[1].equals("lang")) return;
             Properties properties = new Properties();
             try {
                 properties.load(new FileReader(file));
+                languages.put(file.getName().split(".")[0], properties);
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
