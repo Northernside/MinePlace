@@ -95,18 +95,26 @@ public class PlayerInteractListener implements Listener {
                     InventoryPages.changePage(0, pInv);
                 } else if (itemDP.equals("§8«§r §7Back")) {
                     InventoryPages.changePage(1, pInv);
-                }/* else if (itemDP.equals("§cCancel")) {
+                } else if (itemDP.equals("§cCancel")) {
                     InventoryPages.changePage(0, pInv);
                 } else if (itemDP.equals("§7Censor")) {
-
+                    InventoryPages.changePage(42069, pInv);
                 } else if (itemDP.equals("§7Last placed by")) {
                     if (lastPlaced.get(clickedBlock.getLocation()) != null) {
                         player.sendMessage("§e" + clickedBlock.getLocation().getX() + ", " + clickedBlock.getLocation().getZ() + " §awas placed by §e" + Bukkit.getOfflinePlayer(lastPlaced.get(clickedBlock.getLocation())).getName() + " (" + lastPlaced.get(clickedBlock.getLocation()) + ")");
                     } else {
                         player.sendMessage("§cThis block isn't cached :(");
                     }
-                }*/
-                // Need to wait for the rank system, else this will be highly exploitable.
+                } else if (itemDP.equals("§7Position")) {
+                    // Too lazy for now
+//                    if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+//
+//                    } else if (event.getAction() == Action.LEFT_CLICK_BLOCK)) {
+//
+//                    }
+                } else if (itemDP.equals("§aCensor")) {
+                    // Too lazy for now
+                }
             }
         }
     }

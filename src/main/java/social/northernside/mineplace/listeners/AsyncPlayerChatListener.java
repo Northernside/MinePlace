@@ -19,10 +19,10 @@ public class AsyncPlayerChatListener implements Listener {
         String message = event.getMessage().replace("%", "%%");
         Player player = event.getPlayer();
         if (RankProvider.getInstance().getRank(event.getPlayer()) == Rank.ADMIN) {
-            event.setFormat("§4Administrator §8» §4" + player.getName() + " §8» §7" + message.replace('&', '§'));
-        } else if (RankProvider.getInstance().getRank(event.getPlayer()) == Rank.ADMIN) {
-            event.setFormat("§cModerator §8» §c" + player.getName() + " §8» §7" + message.replace('&', '§'));
-        } else if (RankProvider.getInstance().getRank(event.getPlayer()) == Rank.ADMIN) {
+            event.setFormat("§4Admin §8» §c" + player.getName() + " §8» §7" + message.replace('&', '§'));
+        } else if (RankProvider.getInstance().getRank(event.getPlayer()) == Rank.MOD) {
+            event.setFormat("§cMod §8» §c" + player.getName() + " §8» §7" + message.replace('&', '§'));
+        } else if (RankProvider.getInstance().getRank(event.getPlayer()) == Rank.VIP) {
             Long time = System.currentTimeMillis();
             Long nextMSG = (cooldownMap.get(player.getUniqueId()) == null) ? 0L : cooldownMap.get(player.getUniqueId());
 
