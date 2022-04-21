@@ -17,7 +17,11 @@ public class RankProvider {
     private final YamlConfiguration yamlConfiguration;
 
     public static RankProvider getInstance() {
-        return instance;
+        if (RankProvider.instance == null) {
+            RankProvider.instance = new RankProvider();
+        }
+
+        return RankProvider.instance;
     }
 
     public RankProvider() {

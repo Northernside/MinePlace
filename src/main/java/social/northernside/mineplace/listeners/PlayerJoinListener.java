@@ -19,7 +19,7 @@ public class PlayerJoinListener implements Listener {
 
         event.setJoinMessage(null);
         player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 1, 0.5));
-        player.setGameMode(GameMode.CREATIVE);
+        player.setGameMode(GameMode.SURVIVAL);
         player.setFlying(true);
 
         InventoryPages.changePage(0, player.getInventory());

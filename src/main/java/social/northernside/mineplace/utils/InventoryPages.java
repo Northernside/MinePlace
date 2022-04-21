@@ -10,6 +10,11 @@ import org.bukkit.material.Wool;
 public class InventoryPages {
 
     public static void changePage(int page, Inventory pInv) {
+        ItemStack cancelBtn = new ItemStack(Material.BARRIER, 1);
+        ItemMeta cBMeta = cancelBtn.getItemMeta();
+        cBMeta.setDisplayName("§cCancel");
+        cancelBtn.setItemMeta(cBMeta);
+
         pInv.clear();
         switch (page) {
             case 0:
@@ -59,11 +64,6 @@ public class InventoryPages {
                 pInv.setItem(1, new Wool(DyeColor.PINK).toItemStack(1));
                 break;
             case 666:
-                ItemStack cancelBtn = new ItemStack(Material.BARRIER, 1);
-                ItemMeta cBMeta = cancelBtn.getItemMeta();
-                cBMeta.setDisplayName("§cCancel");
-                cancelBtn.setItemMeta(cBMeta);
-
                 ItemStack censorTool = new ItemStack(Material.COAL_BLOCK, 1);
                 ItemMeta cTMeta = censorTool.getItemMeta();
                 cTMeta.setDisplayName("§7Censor");
@@ -77,6 +77,21 @@ public class InventoryPages {
                 pInv.setItem(0, cancelBtn);
                 pInv.setItem(3, censorTool);
                 pInv.setItem(5, lPBTool);
+                break;
+            case 42069:
+                ItemStack posItem = new ItemStack(Material.BLAZE_ROD, 1);
+                ItemMeta pIMeta = posItem.getItemMeta();
+                pIMeta.setDisplayName("§7Position");
+                posItem.setItemMeta(pIMeta);
+
+                ItemStack censorBtn = new ItemStack(Material.BLAZE_ROD, 1);
+                ItemMeta ceBMeta = censorBtn.getItemMeta();
+                ceBMeta.setDisplayName("§aCensor");
+                censorBtn.setItemMeta(ceBMeta);
+
+                pInv.setItem(0, cancelBtn);
+                pInv.setItem(4, posItem);
+                pInv.setItem(8, censorBtn);
                 break;
         }
     }
