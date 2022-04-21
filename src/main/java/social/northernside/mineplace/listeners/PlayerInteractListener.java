@@ -34,11 +34,13 @@ public class PlayerInteractListener implements Listener {
         Action action = event.getAction();
         ItemStack item = event.getItem();
 
-        if (item.getType() == Material.WATER_BUCKET || item.getType() == Material.LAVA_BUCKET) event.setUseItemInHand(Event.Result.DENY);
-
         if (item != null) {
             Block clickedBlock = event.getClickedBlock();
             if (action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
+                if (item.getType() == Material.WATER_BUCKET || item.getType() == Material.LAVA_BUCKET) {
+                    event.setUseItemInHand(Event.Result.DENY);
+                    return;
+                }
                 if (item.getType() != Material.ARROW) {
                     Long time = System.currentTimeMillis();
                     Long nextPlace = (cooldownMap.get(player.getUniqueId()) == null) ? 0L : cooldownMap.get(player.getUniqueId());
