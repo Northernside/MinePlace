@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import social.northernside.mineplace.commands.ModToolCommand;
+import social.northernside.mineplace.commands.RankCommand;
 import social.northernside.mineplace.commands.TeamCommand;
 import social.northernside.mineplace.commands.PingCommand;
 import social.northernside.mineplace.listeners.*;
@@ -28,12 +29,16 @@ public class MinePlace extends JavaPlugin {
         pm.registerEvents(new PlayerDropItemListener(), this);
         pm.registerEvents(new AsyncPlayerChatListener(), this);
         pm.registerEvents(new PlayerQuitListener(), this);
+        pm.registerEvents(new EntityDamageListener(), this);
+        pm.registerEvents(new EntitySpawnListener(), this);
+        pm.registerEvents(new FoodLevelChangeListener(), this);
 
         getServer().getMessenger().registerIncomingPluginChannel(this, "labymod3:main", new LabyModListener());
 
         getCommand("ping").setExecutor(new PingCommand());
         getCommand("team").setExecutor(new TeamCommand());
         getCommand("modtool").setExecutor(new ModToolCommand());
+        getCommand("rank").setExecutor(new RankCommand());
     }
 
     @Override

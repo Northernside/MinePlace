@@ -14,3 +14,5 @@ commands:
     description: Manage teams
   modtool:
     description: Secret!
+  rank:
+    description: Secret!
