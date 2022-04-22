@@ -29,6 +29,14 @@ public class RankCommand implements CommandExecutor {
                         RankProvider.getInstance().setRank(args[0], Rank.MOD);
                         commandSender.sendMessage("§aSet rank of §e" + args[0] + " §ato §e" + args[1]);
                         break;
+                    case "srmod":
+                        RankProvider.getInstance().setRank(args[0], Rank.SRMOD);
+                        commandSender.sendMessage("§aSet rank of §e" + args[0] + " §ato §e" + args[1]);
+                        break;
+                    case "dev":
+                        RankProvider.getInstance().setRank(args[0], Rank.DEV);
+                        commandSender.sendMessage("§aSet rank of §e" + args[0] + " §ato §e" + args[1]);
+                        break;
                     case "admin":
                         RankProvider.getInstance().setRank(args[0], Rank.ADMIN);
                         commandSender.sendMessage("§aSet rank of §e" + args[0] + " §ato §e" + args[1]);

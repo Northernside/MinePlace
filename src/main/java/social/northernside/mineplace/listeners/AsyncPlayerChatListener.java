@@ -19,7 +19,7 @@ public class AsyncPlayerChatListener implements Listener {
         String message = event.getMessage().replace("%", "%%");
         Player player = event.getPlayer();
         if (RankProvider.getInstance().getRank(event.getPlayer()) == Rank.ADMIN) {
-            event.setFormat("§4Admin §8» §c" + player.getName() + " §8» §7" + message.replace('&', '§'));
+            event.setFormat("§4Admin §8» §4" + player.getName() + " §8» §7" + message.replace('&', '§'));
         } else if (RankProvider.getInstance().getRank(event.getPlayer()) == Rank.DEV) {
             event.setFormat("§9Developer §8» §9" + player.getName() + " §8» §7" + message.replace('&', '§'));
         } else if (RankProvider.getInstance().getRank(event.getPlayer()) == Rank.SRMOD) {

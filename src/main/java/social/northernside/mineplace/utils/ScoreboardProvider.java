@@ -18,8 +18,8 @@ public class ScoreboardProvider {
         scoreboard.registerNewTeam("05VIP");
         scoreboard.registerNewTeam("06Guest");
 
-        scoreboard.getTeam("01Admin").setPrefix("§4Admin §8» §c");
-        scoreboard.getTeam("02Dev").setPrefix("§9Dev §8» §c");
+        scoreboard.getTeam("01Admin").setPrefix("§4Admin §8» §4");
+        scoreboard.getTeam("02Dev").setPrefix("§9Dev §8» §9");
         scoreboard.getTeam("03SrMod").setPrefix("§cSrMod §8» §c");
         scoreboard.getTeam("04Mod").setPrefix("§cMod §8» §c");
         scoreboard.getTeam("05VIP").setPrefix("§5VIP §8» §5");
