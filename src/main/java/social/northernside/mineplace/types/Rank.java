@@ -4,9 +4,11 @@ package social.northernside.mineplace.types;
 public enum Rank {
 
     ADMIN(1),
-    MOD(2),
-    VIP(3),
-    GUEST(4);
+    DEV(2),
+    SRMOD(3),
+    MOD(4),
+    VIP(5),
+    GUEST(6);
 
     private final int id;
 
@@ -19,10 +21,14 @@ public enum Rank {
             case 1:
                 return ADMIN;
             case 2:
-                return MOD;
+                return DEV;
             case 3:
-                return VIP;
+                return SRMOD;
             case 4:
+                return MOD;
+            case 5:
+                return VIP;
+            case 6:
                 return GUEST;
         }
         return GUEST;
