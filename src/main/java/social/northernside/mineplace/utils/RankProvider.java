@@ -44,4 +44,8 @@ public class RankProvider {
         this.yamlConfiguration.set(Bukkit.getOfflinePlayer(name).getUniqueId().toString(), rank.getId());
         yamlConfiguration.save(this.file);
     }
+// needed=Mod(2), Player=Admin(1)
+    public boolean isPermitted(Player player, Rank neededRank) {
+        return getRank(player).getId() <= neededRank.getId();
+    }
 }

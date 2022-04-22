@@ -13,15 +13,12 @@ public class ModToolCommand implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
-            if (RankProvider.getInstance().getRank(player) == Rank.MOD || RankProvider.getInstance().getRank(player) == Rank.ADMIN || player.isOp()) {
+            if (RankProvider.getInstance().isPermitted(player, Rank.MOD) || player.isOp()) {
                 InventoryPages.changePage(666, player.getInventory());
             } else {
                 commandSender.sendMessage("§cYou are not permitted to execute this command");
             }
-
-            //InventoryPages.changePage(666, player.getInventory());
         }
-
         return false;
     }
 }
