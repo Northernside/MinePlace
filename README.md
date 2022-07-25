@@ -21,4 +21,4 @@ You can either host it yourself by compiling this project as a plugin, or you ca
 Contributions are always welcome! Help make MinePlace a wonderful place to be! 🌸
 
 ## Contact
-So many possibilities that questions have arisen? These should not remain unanswered! Feel free to create an issue directly in the repository or send us a mail at [contact@mineplace.world](mailto:mineplace@nordcloud.space)! :smile:
+So many possibilities that questions have arisen? These should not remain unanswered! Feel free to create an issue directly in the repository or send us a mail at [mineplace@nordcloud.space](mailto:mineplace@nordcloud.space)! :smile:
