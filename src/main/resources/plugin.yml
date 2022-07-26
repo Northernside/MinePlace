@@ -1,9 +1,10 @@
 name: MinePlace
-version: 1.1
+version: 1.1.2
 authors:
   - Northernside
   - unordentlich
   - Zeichenfolge
+  - L3nnart_
   - InspectorRex
 main: social.northernside.mineplace.MinePlace
 
@@ -15,4 +16,6 @@ commands:
   modtool:
     description: Secret!
   rank:
+    description: Secret!
+  bypasscooldown:
     description: Secret!
