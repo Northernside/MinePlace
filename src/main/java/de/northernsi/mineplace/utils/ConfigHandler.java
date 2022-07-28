@@ -139,4 +139,26 @@ public class ConfigHandler {
     public void unbanTeamMember(String teamName, UUID pUUID) {
         removeTeamMember(teamName, pUUID);
     }
+
+    public void createConfig() {
+        File file = new File(pluginDirPath, "config.yml");
+        if (file.exists()) {
+            return;
+        }
+
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        cfg.set("webhook_url", "UNSET");
+
+        try {
+            cfg.save(file);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public String getWebhookURL() {
+        File file = new File(pluginDirPath, "config.yml");
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        return cfg.getString("webhook_url");
+    }
 }

@@ -10,6 +10,7 @@ import com.comphenix.protocol.wrappers.WrappedGameProfile;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import de.northernsi.mineplace.commands.*;
 import de.northernsi.mineplace.listeners.*;
+import de.northernsi.mineplace.utils.ConfigHandler;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.NetworkManager;
 import net.minecraft.server.v1_12_R1.PlayerConnection;
@@ -35,6 +36,8 @@ public class MinePlace extends JavaPlugin {
         System.out.println("> MinePlace has been enabled.");
         MinePlace.instance = this;
 
+        getServer().getMessenger().registerIncomingPluginChannel(this, "labymod3:main", new LabyModListener());
+
         PluginManager pm = Bukkit.getPluginManager();
         pm.registerEvents(new BlockBreakListener(), this);
         pm.registerEvents(new BlockPlaceListener(), this);
@@ -48,7 +51,6 @@ public class MinePlace extends JavaPlugin {
         pm.registerEvents(new EntitySpawnListener(), this);
         pm.registerEvents(new FoodLevelChangeListener(), this);
         pm.registerEvents(new PlayerCommandPreProcessListener(), this);
-        getServer().getMessenger().registerIncomingPluginChannel(this, "labymod3:main", new LabyModListener());
 
         getCommand("ping").setExecutor(new PingCommand());
         getCommand("team").setExecutor(new TeamCommand());
@@ -78,6 +80,8 @@ public class MinePlace extends JavaPlugin {
                 ping.setVersionName("§c1.8 - 1.19");
             }
         });
+
+        ConfigHandler.getInstance().createConfig();
     }
 
     @Override

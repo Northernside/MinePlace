@@ -1,6 +1,7 @@
 package de.northernsi.mineplace.commands;
 
 import de.northernsi.mineplace.utils.ConfigHandler;
+import de.northernsi.mineplace.utils.SubtitleUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -30,29 +31,56 @@ public class TeamCommand implements CommandExecutor {
                 }
 
                 if (args[0].equalsIgnoreCase("delete") && args[1].equalsIgnoreCase("confirm")) {
-                    if (teamName != null) {
-                        if (ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID).equals("owner")) {
-                            ConfigHandler.getInstance().deleteTeam(teamName, pUUID);
-                            player.kickPlayer("§aSuccessfully deleted your team.\n\n§ePlease rejoin.");
-                        }
-                    } else {
+                    if (teamName == null) {
                         player.sendMessage("§cYou're not in a team!");
+                        return false;
                     }
+
+                    if (!ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID).equals("owner")) {
+                        player.sendMessage("§cYou're not the owner of this team!");
+                        return false;
+                    }
+
+                    for (Player gop : Bukkit.getOnlinePlayers()) {
+                        if (ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()) != null
+                                && ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()).equals(teamName)
+                                && !gop.getUniqueId().equals(pUUID)) {
+                            gop.sendMessage("§cYour team has been deleted by the owner.");
+                            for (Player allPlayers : Bukkit.getOnlinePlayers()) {
+                                SubtitleUtils.setSubtitle(allPlayers, gop.getUniqueId(), null);
+                            }
+                        }
+
+                        SubtitleUtils.setSubtitle(gop, player.getUniqueId(), null);
+                    }
+
+                    ConfigHandler.getInstance().deleteTeam(teamName, pUUID);
+                    player.sendMessage("§cYour team has been deleted.");
 
                     return false;
                 }
 
                 if (args[0].equalsIgnoreCase("leave")) {
-                    if (teamName != null) {
-                        String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
-                        if (!tMRole.equals("owner")) {
-                            ConfigHandler.getInstance().removeTeamMember(teamName, pUUID);
-                            player.kickPlayer("§aYou left team §e#" + teamName + "§a.\n\n§ePlease rejoin.");
-                        } else {
-                            player.sendMessage("§cYou can't leave your own team! Delete it instead via §e/team delete§c.");
-                        }
-                    } else {
+                    if (teamName == null) {
                         player.sendMessage("§cYou're not in a team!");
+                        return false;
+                    }
+
+                    String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
+                    if (tMRole.equals("owner")) {
+                        player.sendMessage("§cYou can't leave your own team! Delete it instead via §e/team delete§c.");
+                        return false;
+                    }
+
+                    ConfigHandler.getInstance().removeTeamMember(teamName, pUUID);
+                    for (Player gop : Bukkit.getOnlinePlayers()) {
+                        if (ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()) != null
+                                && ConfigHandler.getInstance().getTeamByUUID(gop.getUniqueId()).equals(teamName)
+                                && !gop.getUniqueId().equals(pUUID)) {
+                            gop.sendMessage("§e" + player.getName() + " §cleft the team.");
+                        }
+
+                        SubtitleUtils.setSubtitle(gop, player.getUniqueId(), null);
                     }
 
                     return false;
@@ -60,149 +88,225 @@ public class TeamCommand implements CommandExecutor {
 
                 if (args.length >= 2) {
                     if (args[0].equalsIgnoreCase("invite")) {
-                        if (teamName != null) {
-                            Player targetPlayer = Bukkit.getPlayer(args[1]);
-                            if (targetPlayer != null) {
-                                if (targetPlayer != player) {
-                                    targetPlayer.sendMessage("§e" + player.getName() + " §ainvited you to join team §e#" + teamName + "§a.");
-                                    player.sendMessage("§aSuccessfully invited §e" + targetPlayer.getName() + " §ato join your team.");
-                                } else {
-                                    player.sendMessage("§cYou can't execute this command on yourself!");
-                                }
-                            } else {
-                                player.sendMessage("§cThat player isn't online at the moment!");
-                            }
-                        } else {
-                            player.sendMessage("§cYou're not in a team!");
+                        if (args.length < 2) {
+                            player.sendMessage("§cUsage: §e/team invite <username>");
+                            return false;
                         }
+
+                        if (teamName == null) {
+                            player.sendMessage("§cYou're not in a team!");
+                            return false;
+                        }
+
+                        Player targetPlayer = Bukkit.getPlayer(args[1]);
+                        if (targetPlayer == null) {
+                            player.sendMessage("§cThat player isn't online at the moment!");
+                            return false;
+                        }
+
+                        if (targetPlayer == player) {
+                            player.sendMessage("§cYou can't execute this command on yourself!");
+                            return false;
+                        }
+
+                        targetPlayer.sendMessage("§e" + player.getName() + " §ainvited you to join team §e#" + teamName + "§a.");
+                        player.sendMessage("§aSuccessfully invited §e" + targetPlayer.getName() + " §ato join your team.");
 
                         return false;
                     }
 
                     OfflinePlayer tOPlayer = Bukkit.getPlayer(args[1]);
                     if (args[0].equalsIgnoreCase("ban")) {
-                        if (teamName != null) {
-                            String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
-                            if (tMRole.equals("mod") || tMRole.equals("owner")) {
-                                if (tOPlayer != null) {
-                                    if (tOPlayer != player) {
-                                        ConfigHandler.getInstance().banTeamMember(teamName, tOPlayer.getUniqueId());
-                                        player.sendMessage("§aSuccessfully banned user §e" + tOPlayer.getName() + "§a.");
-                                    } else {
-                                        player.sendMessage("§cYou can't execute that command on yourself!");
-                                    }
-                                } else {
-                                    player.sendMessage("§cThat player doesn't exist!");
-                                }
-                            }
-                        } else {
+                        if (args.length < 2) {
+                            player.sendMessage("§cUsage: §e/team ban <username>");
+                            return false;
+                        }
+
+                        if (teamName == null) {
                             player.sendMessage("§cYou're not in a team!");
+                            return false;
+                        }
+
+                        String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
+                        if (!tMRole.equals("mod") || !tMRole.equals("owner")) {
+                            player.sendMessage("§cYou don't have the permission to execute this command!");
+                            return false;
+                        }
+
+                        if (tOPlayer == null) {
+                            player.sendMessage("§cThat player doesn't exist!");
+                            return false;
+                        }
+
+                        if (tOPlayer == player) {
+                            player.sendMessage("§cYou can't execute that command on yourself!");
+                            return false;
+                        }
+
+                        ConfigHandler.getInstance().banTeamMember(teamName, tOPlayer.getUniqueId());
+                        player.sendMessage("§aSuccessfully banned user §e" + tOPlayer.getName() + "§a.");
+                        for (Player gop : Bukkit.getOnlinePlayers()) {
+                            SubtitleUtils.setSubtitle(gop, player.getUniqueId(), null);
                         }
 
                         return false;
                     }
 
                     if (args[0].equalsIgnoreCase("unban")) {
-                        if (teamName != null) {
-                            String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
-                            if (tMRole.equals("mod") || tMRole.equals("owner")) {
-                                if (tOPlayer != null) {
-                                    if (tOPlayer != player) {
-                                        ConfigHandler.getInstance().unbanTeamMember(teamName, tOPlayer.getUniqueId());
-                                        player.sendMessage("§aSuccessfully unbanned user §e" + tOPlayer.getName() + "§a.");
-                                    } else {
-                                        player.sendMessage("§cYou can't execute that command on yourself!");
-                                    }
-                                } else {
-                                    player.sendMessage("§cThat player doesn't exist!");
-                                }
-                            }
-                        } else {
-                            player.sendMessage("§cYou're not in a team!");
+                        if (args.length < 2) {
+                            player.sendMessage("§cUsage: §e/team unban <username>");
+                            return false;
                         }
+
+                        if (teamName == null) {
+                            player.sendMessage("§cYou're not in a team!");
+                            return false;
+                        }
+
+                        String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
+                        if (!tMRole.equals("mod") || !tMRole.equals("owner")) {
+                            player.sendMessage("§cYou don't have the permission to execute this command!");
+                            return false;
+                        }
+
+                        if (tOPlayer == null) {
+                            player.sendMessage("§cThat player doesn't exist!");
+                            return false;
+                        }
+
+                        if (tOPlayer == player) {
+                            player.sendMessage("§cYou can't execute that command on yourself!");
+                            return false;
+                        }
+
+                        ConfigHandler.getInstance().unbanTeamMember(teamName, tOPlayer.getUniqueId());
+                        player.sendMessage("§aSuccessfully unbanned user §e" + tOPlayer.getName() + "§a.");
 
                         return false;
                     }
 
                     if (args[0].equalsIgnoreCase("promote")) {
-                        if (teamName != null) {
-                            String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
-                            if (tMRole.equals("owner")) {
-                                if (tOPlayer != null) {
-                                    if (tOPlayer != player) {
-                                        ConfigHandler.getInstance().promoteTeamMember(teamName, tOPlayer.getUniqueId());
-                                        player.sendMessage("§aSuccessfully promoted user §e" + tOPlayer.getName() + " §ato §eModerator§a.");
-                                    } else {
-                                        player.sendMessage("§cYou can't execute that command on yourself!");
-                                    }
-                                } else {
-                                    player.sendMessage("§cThat player doesn't exist!");
-                                }
-                            }
-                        } else {
-                            player.sendMessage("§cYou're not in a team!");
+                        if (args.length < 2) {
+                            player.sendMessage("§cUsage: §e/team promote <username>");
+                            return false;
                         }
+
+                        if (teamName == null) {
+                            player.sendMessage("§cYou're not in a team!");
+                            return false;
+                        }
+
+                        String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
+                        if (!tMRole.equals("owner")) {
+                            player.sendMessage("§cYou don't have the permission to execute this command!");
+                            return false;
+                        }
+
+                        if (tOPlayer == null) {
+                            player.sendMessage("§cThat player doesn't exist!");
+                            return false;
+                        }
+
+                        if (tOPlayer == player) {
+                            player.sendMessage("§cYou can't execute that command on yourself!");
+                            return false;
+                        }
+
+                        ConfigHandler.getInstance().promoteTeamMember(teamName, tOPlayer.getUniqueId());
+                        player.sendMessage("§aSuccessfully promoted user §e" + tOPlayer.getName() + " §ato §eModerator§a.");
 
                         return false;
                     }
 
                     if (args[0].equalsIgnoreCase("demote")) {
-                        if (teamName != null) {
-                            String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
-                            if (tMRole.equals("owner")) {
-                                if (tOPlayer != null) {
-                                    if (tOPlayer != player) {
-                                        ConfigHandler.getInstance().demoteTeamMember(teamName, tOPlayer.getUniqueId());
-                                        player.sendMessage("§aSuccessfully demoted user §e" + tOPlayer.getName() + "§a.");
-                                    } else {
-                                        player.sendMessage("§cYou can't execute that command on yourself!");
-                                    }
-                                } else {
-                                    player.sendMessage("§cThat player doesn't exist!");
-                                }
-                            }
-                        } else {
-                            player.sendMessage("§cYou're not in a team!");
+                        if (args.length < 2) {
+                            player.sendMessage("§cUsage: §e/team demote <username>");
+                            return false;
                         }
+
+                        if (teamName != null) {
+                            player.sendMessage("§cYou're not in a team!");
+                            return false;
+                        }
+
+                        String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
+                        if (!tMRole.equals("owner")) {
+                            player.sendMessage("§cYou don't have the permission to execute this command!");
+                            return false;
+                        }
+
+                        if (tOPlayer == null) {
+                            player.sendMessage("§cThat player doesn't exist!");
+                            return false;
+                        }
+
+                        if (tOPlayer == player) {
+                            player.sendMessage("§cYou can't execute that command on yourself!");
+                            return false;
+                        }
+
+                        ConfigHandler.getInstance().demoteTeamMember(teamName, tOPlayer.getUniqueId());
+                        player.sendMessage("§aSuccessfully demoted user §e" + tOPlayer.getName() + "§a.");
 
                         return false;
                     }
 
                     if (args[0].equalsIgnoreCase("create")) {
-                        if (teamName == null) {
-                            if (args[1].length() <= 16) {
-                                if (!ConfigHandler.getInstance().existsTeam(args[1])) {
-                                    ConfigHandler.getInstance().createTeam(args[1], pUUID);
-                                    player.sendMessage("§aSuccessfully created team §e#" + args[1] + "§a.");
-                                    player.kickPlayer("§aSuccessfully created team §e#" + args[1] + "§a.\n\n§ePlease rejoin.");
-                                } else {
-                                    player.sendMessage("§cTeam name §e#" + args[1] + " §cis unavailable!");
-                                }
-                            } else {
-                                player.sendMessage("§cTeam name can't be longer than 16 characters!");
-                            }
-                        } else {
+                        if (args.length < 2) {
+                            player.sendMessage("§cUsage: §e/team create <name>");
+                            return false;
+                        }
+
+                        if (teamName != null) {
                             player.sendMessage("§cYou're already in a team!");
+                            return false;
+                        }
+
+                        if (args[1].length() >= 16) {
+                            player.sendMessage("§cTeam name can't be longer than 16 characters!");
+                            return false;
+                        }
+
+                        if (ConfigHandler.getInstance().existsTeam(args[1])) {
+                            player.sendMessage("§cTeam name §e#" + args[1] + " §cis unavailable!");
+                            return false;
+                        }
+
+                        ConfigHandler.getInstance().createTeam(args[1].replace("&", ""), pUUID);
+                        player.sendMessage("§aSuccessfully created team §e#" + args[1] + "§a.");
+                        for (Player gop : Bukkit.getOnlinePlayers()) {
+                            SubtitleUtils.setSubtitle(gop, player.getUniqueId(), teamName.replace("&", ""));
                         }
 
                         return false;
                     }
 
                     if (args[0].equalsIgnoreCase("join")) {
-                        if (teamName == null) {
-                            if (ConfigHandler.getInstance().existsTeam(args[1].replace("#", ""))) {
-                                String tMRole = ConfigHandler.getInstance().getTeamMemberRole(args[1].replace("#", ""), pUUID);
-                                if (tMRole == null) {
-                                    ConfigHandler.getInstance().addTeamMember(args[1].replace("#", ""), pUUID);
-                                    player.kickPlayer("§aSuccessfully joined team §e#" + args[1].replace("#", "") + "§a.\n\n§ePlease rejoin.");
-                                } else {
-                                    player.sendMessage("§cYou're currently banned from team §e#" + args[1].replace("#", "") + "§c!" + tMRole);
-                                }
-                            } else {
-                                player.sendMessage("§cTeam §e#" + args[1].replace("#", "") + " §cdoesn't exist!");
-                            }
-                        } else {
+                        if (args.length < 2) {
+                            player.sendMessage("§cUsage: §e/team join <name>");
+                            return false;
+                        }
+
+                        if (teamName != null) {
                             player.sendMessage("§cYou're already in a team!");
+                            return false;
+                        }
+
+                        if (!ConfigHandler.getInstance().existsTeam(args[1].replace("#", ""))) {
+                            player.sendMessage("§cTeam §e#" + args[1].replace("#", "") + " §cdoesn't exist!");
+                            return false;
+                        }
+
+                        String tMRole = ConfigHandler.getInstance().getTeamMemberRole(args[1].replace("#", ""), pUUID);
+                        if (tMRole != null) {
+                            player.sendMessage("§cYou're currently banned from team §e#" + args[1].replace("#", "") + "§c!" + tMRole);
+                            return false;
+                        }
+
+                        ConfigHandler.getInstance().addTeamMember(args[1].replace("#", ""), pUUID);
+                        player.sendMessage("§aSuccessfully joined team §e#" + args[1].replace("#", "") + "§a.");
+                        for (Player gop : Bukkit.getOnlinePlayers()) {
+                            SubtitleUtils.setSubtitle(gop, player.getUniqueId(), "§e#" + teamName);
                         }
 
                         return false;

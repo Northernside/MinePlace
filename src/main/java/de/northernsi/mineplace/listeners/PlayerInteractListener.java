@@ -1,5 +1,6 @@
 package de.northernsi.mineplace.listeners;
 
+import de.northernsi.mineplace.utils.CensorArea;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Wool;
 import de.northernsi.mineplace.commands.BypassCooldownCommand;
 import de.northernsi.mineplace.utils.InventoryPages;
+import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.Timer;
@@ -28,6 +30,8 @@ import java.util.UUID;
 public class PlayerInteractListener implements Listener {
     public static HashMap<UUID, Long> cooldownMap = new HashMap<>();
     public static HashMap<Location, UUID> lastPlaced = new HashMap<>();
+
+    private static HashMap<UUID, CensorArea> censorLocs = new HashMap<>();
 
     @EventHandler
     public void onPlayerInteractEvent(PlayerInteractEvent event) {
@@ -92,33 +96,72 @@ public class PlayerInteractListener implements Listener {
             String itemDP = item.getItemMeta().getDisplayName();
             if (itemDP != null) {
                 Inventory pInv = player.getInventory();
-                if (itemDP.equals("§8» §7Next")) {
-                    InventoryPages.changePage(1, pInv);
-                } else if (itemDP.equals("§8»§r §7Next")) {
-                    InventoryPages.changePage(2, pInv);
-                } else if (itemDP.equals("§8« §7Back")) {
-                    InventoryPages.changePage(0, pInv);
-                } else if (itemDP.equals("§8«§r §7Back")) {
-                    InventoryPages.changePage(1, pInv);
-                } else if (itemDP.equals("§cCancel")) {
-                    InventoryPages.changePage(0, pInv);
-                } else if (itemDP.equals("§7Censor")) {
-                    InventoryPages.changePage(42069, pInv);
-                } else if (itemDP.equals("§7Last placed by")) {
-                    if (lastPlaced.get(clickedBlock.getLocation()) != null) {
-                        player.sendMessage("§e" + clickedBlock.getLocation().getBlockX() + ", " + (clickedBlock.getLocation().getBlockZ() - 1) + " §awas placed by §e" + Bukkit.getOfflinePlayer(lastPlaced.get(clickedBlock.getLocation())).getName() + " (" + lastPlaced.get(clickedBlock.getLocation()) + ")");
-                    } else {
-                        player.sendMessage("§cThis block isn't cached :(");
-                    }
-                } else if (itemDP.equals("§7Position")) {
-                    // Too lazy for now
-//                    if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-//
-//                    } else if (event.getAction() == Action.LEFT_CLICK_BLOCK)) {
-//
-//                    }
-                } else if (itemDP.equals("§aCensor")) {
-                    // Too lazy for now
+                switch (itemDP) {
+                    case "§8» §7Next":
+                        InventoryPages.changePage(1, pInv);
+                        break;
+                    case "§8»§r §7Next":
+                        InventoryPages.changePage(2, pInv);
+                        break;
+                    case "§8« §7Back":
+                        InventoryPages.changePage(0, pInv);
+                        break;
+                    case "§8«§r §7Back":
+                        InventoryPages.changePage(1, pInv);
+                        break;
+                    case "§cCancel":
+                        InventoryPages.changePage(0, pInv);
+                        break;
+                    case "§7Censor":
+                        InventoryPages.changePage(42069, pInv);
+                        break;
+                    case "§7Last placed by":
+                        if (clickedBlock.getLocation() == null || lastPlaced.get(clickedBlock.getLocation()) == null) {
+                            player.sendMessage("§cThis block isn't cached :(");
+                        }
+
+                        player.sendMessage("§e" + clickedBlock.getLocation().getBlockX() + ", " + clickedBlock.getLocation().getBlockZ()
+                                + " §awas placed by §e" + Bukkit.getOfflinePlayer(lastPlaced.get(clickedBlock.getLocation())).getName()
+                                + " (" + lastPlaced.get(clickedBlock.getLocation()) + ")");
+                        break;
+                    case "§7Position":
+                        if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+                            if (!censorLocs.containsKey(player.getUniqueId())) censorLocs.put(player.getUniqueId(), new CensorArea());
+                            censorLocs.get(player.getUniqueId()).setLoc1(clickedBlock.getLocation());
+                            player.sendMessage("§aFirst position set!");
+                            return;
+                        } else if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                            if (!censorLocs.containsKey(player.getUniqueId())) censorLocs.put(player.getUniqueId(), new CensorArea());
+                            censorLocs.get(player.getUniqueId()).setLoc2(clickedBlock.getLocation());
+                            player.sendMessage("§aSecond position set!");
+                            return;
+                        }
+
+                        player.sendMessage("§cYou must select both blocks first.");
+                        break;
+                    case "§aCensor":
+                        if (censorLocs.containsKey(player.getUniqueId())) {
+                            if (censorLocs.get(player.getUniqueId()).isReady()) {
+                                Vector max = Vector.getMaximum(censorLocs.get(player.getUniqueId()).getLoc1().toVector(), censorLocs.get(player.getUniqueId()).getLoc2().toVector());
+                                Vector min = Vector.getMinimum(censorLocs.get(player.getUniqueId()).getLoc1().toVector(), censorLocs.get(player.getUniqueId()).getLoc2().toVector());
+                                for (int i = min.getBlockX(); i <= max.getBlockX(); i++) {
+                                    for (int k = min.getBlockZ(); k <= max.getBlockZ(); k++) {
+                                        Block block = censorLocs.get(player.getUniqueId()).getWorld().getBlockAt(i, 0, k);
+                                        block.setType(Material.WOOL);
+                                    }
+                                }
+
+                                censorLocs.remove(player.getUniqueId());
+                                player.sendMessage("§aCensored!");
+                                // TODO: Log to Discord
+                            } else {
+                                player.sendMessage("§cYou must select both blocks first.");
+                            }
+                        } else {
+                            player.sendMessage("§cYou must select both blocks first.");
+                        }
+
+                        break;
                 }
             }
         }
