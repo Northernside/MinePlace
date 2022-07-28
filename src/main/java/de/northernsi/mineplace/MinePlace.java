@@ -1,12 +1,23 @@
 package de.northernsi.mineplace;
 
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.ListenerOptions;
+import com.comphenix.protocol.events.ListenerPriority;
+import com.comphenix.protocol.events.PacketAdapter;
+import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.wrappers.WrappedGameProfile;
+import com.comphenix.protocol.wrappers.WrappedServerPing;
 import de.northernsi.mineplace.commands.*;
 import de.northernsi.mineplace.listeners.*;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class MinePlace extends JavaPlugin {
@@ -38,6 +49,30 @@ public class MinePlace extends JavaPlugin {
         getCommand("modtool").setExecutor(new ModToolCommand());
         getCommand("rank").setExecutor(new RankCommand());
         getCommand("bypasscooldown").setExecutor(new BypassCooldownCommand());
+
+        final List<WrappedGameProfile> names = new ArrayList<>();
+        names.add(new WrappedGameProfile("1", " "));
+        names.add(new WrappedGameProfile("2", "        §e§lMine§6§lPlace §8» §7r/place in Minecraft "));
+        names.add(new WrappedGameProfile("3", "                 §8» §emine§6place§7.space §8«       "));
+        names.add(new WrappedGameProfile("4", " "));
+        names.add(new WrappedGameProfile("5", "               §9discord.gg/4ttvN7m2SY               "));
+        names.add(new WrappedGameProfile("6", " "));
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, ListenerPriority.NORMAL,
+                Arrays.asList(PacketType.Status.Server.OUT_SERVER_INFO), ListenerOptions.ASYNC) {
+            @Override
+            public void onPacketSending(PacketEvent event) {
+                event.getPacket().getServerPings().read(0).setPlayers(names);
+            }
+        });
+
+        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, PacketType.Status.Server.OUT_SERVER_INFO) {
+            @Override
+            public void onPacketSending(PacketEvent event) {
+                WrappedServerPing ping = event.getPacket().getServerPings().read(0);
+                ping.setVersionProtocol(999);
+                ping.setVersionName("§c1.8 - 1.19");
+            }
+        });
     }
 
     @Override
