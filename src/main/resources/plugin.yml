@@ -1,21 +1,22 @@
 name: MinePlace
-version: 1.1.2
+version: 1.2
 authors:
   - Northernside
   - unordentlich
   - Zeichenfolge
   - L3nnart_
   - InspectorRex
-main: social.northernside.mineplace.MinePlace
+main: de.northernsi.mineplace.MinePlace
+description: MinePlace offers a completely new gaming experience in Minecraft. As a parody of r/place, a world-renowned reddit community project, this project offers endless possibilities to immortalise one's creativity in MinePlace, in addition to many varied features such as joining game teams or a large number of colours.
 
 commands:
   ping:
-    description: Display your network latency
+    description: Display your or other users' network latency.
   team:
-    description: Manage teams
+    description: Manage teams.
   modtool:
-    description: Secret!
+    description: Opens the mod tool menu.
   rank:
-    description: Secret!
+    description: Sets the rank of an user.
   bypasscooldown:
-    description: Secret!
+    description: Bypasses the placing cooldown.
