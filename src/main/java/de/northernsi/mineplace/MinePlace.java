@@ -57,6 +57,7 @@ public class MinePlace extends JavaPlugin {
         getCommand("modtool").setExecutor(new ModToolCommand());
         getCommand("rank").setExecutor(new RankCommand());
         getCommand("bypasscooldown").setExecutor(new BypassCooldownCommand());
+        getCommand("rules").setExecutor(new RulesCommand());
 
         final List<WrappedGameProfile> names = new ArrayList<>();
         names.add(new WrappedGameProfile("1", " "));

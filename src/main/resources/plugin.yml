@@ -21,3 +21,5 @@ commands:
     description: Sets the rank of an user.
   bypasscooldown:
     description: Bypasses the placing cooldown.
+  rules:
+    description: Shows the rules.
