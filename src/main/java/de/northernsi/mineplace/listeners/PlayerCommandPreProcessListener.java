@@ -16,10 +16,15 @@ public class PlayerCommandPreProcessListener implements Listener {
         switch (command) {
             case "/plugins":
             case "/pl":
+            case "/bukkit:plugins":
+            case "/bukkit:pl":
             case "/version":
             case "/ver":
+            case "/bukkit:version":
+            case "/bukkit:ver":
             case "/v":
             case "/about":
+            case "/bukkit:about":
             case "/bukkit":
             case "/spigot":
             case "/paper":
