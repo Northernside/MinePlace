@@ -2,6 +2,7 @@ package de.northernsi.mineplace.commands;
 
 import de.northernsi.mineplace.MinePlace;
 import de.northernsi.mineplace.utils.ConfigHandler;
+import de.northernsi.mineplace.utils.LabyModAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -46,11 +47,11 @@ public class TeamCommand implements CommandExecutor {
                                 && !gop.getUniqueId().equals(pUUID)) {
                             gop.sendMessage("§cYour team has been deleted by the owner.");
                             for (Player allPlayers : Bukkit.getOnlinePlayers()) {
-                                SubtitleUtils.setSubtitle(allPlayers, gop.getUniqueId(), null);
+                                LabyModAPI.sendSubtitle(allPlayers, gop, null);
                             }
                         }
 
-                        SubtitleUtils.setSubtitle(gop, player.getUniqueId(), null);
+                        LabyModAPI.sendSubtitle(player, gop, null);
                     }
 
                     ConfigHandler.getInstance().deleteTeam(teamName, pUUID);
@@ -79,7 +80,7 @@ public class TeamCommand implements CommandExecutor {
                             gop.sendMessage("§e" + player.getName() + " §cleft the team.");
                         }
 
-                        SubtitleUtils.setSubtitle(gop, player.getUniqueId(), null);
+                        LabyModAPI.sendSubtitle(gop, player, null);
                     }
 
                     return false;
@@ -150,7 +151,7 @@ public class TeamCommand implements CommandExecutor {
                         ConfigHandler.getInstance().banTeamMember(teamName, tOPlayer.getUniqueId());
                         player.sendMessage("§aSuccessfully banned user §e" + tOPlayer.getName() + "§a.");
                         for (Player gop : Bukkit.getOnlinePlayers()) {
-                            SubtitleUtils.setSubtitle(gop, player.getUniqueId(), null);
+                            LabyModAPI.sendSubtitle(gop, player, null);
                         }
 
                         return false;
@@ -280,7 +281,7 @@ public class TeamCommand implements CommandExecutor {
                         ConfigHandler.getInstance().createTeam(teamName, pUUID);
                         player.sendMessage("§aSuccessfully created team §e#" + teamName + "§a.");
                         for (Player gop : Bukkit.getOnlinePlayers()) {
-                            SubtitleUtils.setSubtitle(gop, player.getUniqueId(), teamName);
+                            LabyModAPI.sendSubtitle(gop, player, "§e#" + teamName);
                         }
 
                         return false;
@@ -311,7 +312,7 @@ public class TeamCommand implements CommandExecutor {
                         ConfigHandler.getInstance().addTeamMember(args[1].replace("#", ""), pUUID);
                         player.sendMessage("§aSuccessfully joined team §e#" + args[1].replace("#", "") + "§a.");
                         for (Player gop : Bukkit.getOnlinePlayers()) {
-                            SubtitleUtils.setSubtitle(gop, player.getUniqueId(), "§e#" + teamName);
+                            LabyModAPI.sendSubtitle(gop, player, "§e#" + teamName);
                         }
 
                         return false;

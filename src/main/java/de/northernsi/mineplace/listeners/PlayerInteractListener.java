@@ -3,6 +3,7 @@ package de.northernsi.mineplace.listeners;
 import de.northernsi.mineplace.commands.BypassCooldownCommand;
 import de.northernsi.mineplace.utils.CensorArea;
 import de.northernsi.mineplace.utils.InventoryPages;
+import net.minecraft.server.v1_12_R1.PacketPlayOutBlockChange;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,10 +13,13 @@ import org.bukkit.block.BlockState;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -43,58 +47,57 @@ public class PlayerInteractListener implements Listener {
             return;
 
         Block clickedBlock = event.getClickedBlock();
-        if (action != Action.LEFT_CLICK_BLOCK && action != Action.RIGHT_CLICK_BLOCK)
-            return;
+        if (action == Action.LEFT_CLICK_BLOCK || action == Action.RIGHT_CLICK_BLOCK) {
+            if (clickedBlock.getLocation().getY() == 0 && event.getItem().getType().equals(Material.WOOL)) {
+                Long time = System.currentTimeMillis();
+                Long nextPlace = (cooldownMap.get(player.getUniqueId()) == null) ? 0L : cooldownMap.get(player.getUniqueId());
+                if (nextPlace + 5 * 1000 >= time && !BypassCooldownCommand.bypassingUsers.contains(player.getUniqueId()))
+                    return;
 
-        if (item.getType() == Material.ARROW)
-            return;
+                if (cooldownMap.containsKey(player.getUniqueId()))
+                    return;
 
-        Long time = System.currentTimeMillis();
-        Long nextPlace = (cooldownMap.get(player.getUniqueId()) == null) ? 0L : cooldownMap.get(player.getUniqueId());
-        if (nextPlace + 5 * 1000 >= time && !BypassCooldownCommand.bypassingUsers.contains(player.getUniqueId()))
-            return;
+                Block block = Bukkit.getWorld("world").getBlockAt(clickedBlock.getLocation());
+                block.setType(Material.WOOL);
+                BlockState blockState = block.getState();
+                blockState.setData(new Wool(((Wool) item.getData()).getColor()));
+                blockState.update();
+                BlockPlaceEvent blockPlaceEvent = new BlockPlaceEvent(clickedBlock, blockState, block, item, player,
+                        true);
+                Bukkit.getPluginManager().callEvent(blockPlaceEvent);
 
-        if (cooldownMap.containsKey(player.getUniqueId()))
-            return;
+                lastPlaced.put(clickedBlock.getLocation(), player.getUniqueId());
+                if (BypassCooldownCommand.bypassingUsers.contains(player.getUniqueId()))
+                    return;
 
-        if (clickedBlock.getLocation().getY() != 0 || !event.getItem().getType().equals(Material.WOOL))
-            return;
+                cooldownMap.put(player.getUniqueId(), time);
+                BossBar bossBar = Bukkit.createBossBar("§cPlease wait 5 seconds.", BarColor.BLUE, BarStyle.SEGMENTED_10);
+                bossBar.addPlayer(player);
+                bossBar.setProgress(1);
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    double cooldown = 5;
+                    int point = 0;
 
-        clickedBlock.setType(Material.WOOL);
+                    @Override
+                    public void run() {
+                        point++;
+                        cooldown -= 0.5D;
+                        bossBar.setProgress((cooldown / 10) * 2);
 
-        BlockState blockState = clickedBlock.getState();
-        blockState.setData(new Wool(((Wool) item.getData()).getColor()));
-        blockState.update();
+                        if (cooldown % 1 == 0)
+                            bossBar.setTitle("§cPlease wait " + (int) cooldown + " second" + ((int) cooldown != 1 ? "s." : "."));
 
-        lastPlaced.put(clickedBlock.getLocation(), player.getUniqueId());
-        if (BypassCooldownCommand.bypassingUsers.contains(player.getUniqueId()))
-            return;
-
-        cooldownMap.put(player.getUniqueId(), time);
-        BossBar bossBar = Bukkit.createBossBar("§cPlease wait 5 seconds.", BarColor.BLUE, BarStyle.SEGMENTED_10);
-        bossBar.addPlayer(player);
-        bossBar.setProgress(1);
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            double cooldown = 5;
-            int point = 0;
-
-            @Override
-            public void run() {
-                point++;
-                cooldown -= 0.5D;
-                bossBar.setProgress((cooldown / 10) * 2);
-
-                if (cooldown % 1 == 0)
-                    bossBar.setTitle("§cPlease wait " + (int) cooldown + " second" + ((int) cooldown != 1 ? "s." : "."));
-
-                if (cooldown == 0D) {
-                    bossBar.removePlayer(player);
-                    cooldownMap.remove(player.getUniqueId(), time);
-                    timer.cancel();
-                }
+                        if (cooldown == 0D) {
+                            bossBar.removePlayer(player);
+                            cooldownMap.remove(player.getUniqueId(), time);
+                            timer.cancel();
+                        }
+                    }
+                }, 500, 500);
+                return;
             }
-        }, 500, 500);
+        }
 
         String itemDP = item.getItemMeta().getDisplayName();
         if (itemDP == null)

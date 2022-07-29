@@ -40,21 +40,22 @@ public class MPPlayer implements Player {
     }
 
     public void joinMinePlace() {
-        teleport(MPMap.getMapLocation());
-        setGameMode(GameMode.SURVIVAL);
-        setAllowFlight(true);
-        InventoryPages.changePage(0, getInventory());
+        player.teleport(new Location(Bukkit.getWorld("world"), 0.5, 5, 0.5));
+        player.setGameMode(GameMode.SURVIVAL);
+        player.setAllowFlight(true);
+        player.setFlying(true);
+        InventoryPages.changePage(0, player.getInventory());
 
         ScoreboardProvider.getInstance().setScoreboard();
-        TabAPI.setTab(this, "&e&lMine&6&lPlace", " &7Made with &c❤ &7by Northernside ");
-        LabyModAPI.setRPC(this);
-        LabyModAPI.sendGamemode(this, "r/place in Minecraft");
-        LabyModAPI.sendBanner(this);
+        TabAPI.setTab(player, "&e&lMine&6&lPlace", " &7Made with &c❤ &7by Northernside ");
+        LabyModAPI.setRPC(player);
+        LabyModAPI.sendGamemode(player, "r/place in Minecraft");
+        LabyModAPI.sendBanner(player);
 
         sendMessage("§e§lMine§6§lPlace §7» §aWelcome to MinePlace!");
         new BukkitRunnable() {
             public void run() {
-                if (!MinePlace.getInstance().usersWithLM.contains(getUniqueId()))
+                if (!MinePlace.getInstance().usersWithLM.contains(player.getUniqueId()))
                     sendMessage("§7Hey, we've detected that you're not using LabyMod.\nMight wanna try it? Download" +
                             "it via https://labymod.net/download\n\nWe've made great use of the LabyMod API which" +
                             "allows us to give all LabyMod users a better experience while playing on MinePlace.\nFor" +
@@ -73,31 +74,31 @@ public class MPPlayer implements Player {
         for (Player onlinePlayers : Bukkit.getOnlinePlayers()) {
             MPPlayer loopedPlayer = new MPPlayer(onlinePlayers);
             if (getTeam() != null)
-                LabyModAPI.sendSubtitle(this, onlinePlayers, "§e#" + getTeam());
+                LabyModAPI.sendSubtitle(player, onlinePlayers, "§e#" + getTeam());
             if (loopedPlayer.getTeam() != null)
-                LabyModAPI.sendSubtitle(onlinePlayers, this, "§e#" + loopedPlayer.getTeam());
+                LabyModAPI.sendSubtitle(onlinePlayers, player, "§e#" + loopedPlayer.getTeam());
         }
     }
 
     public int getVersion() {
-        Integer playerVersion = Via.getAPI().getPlayerVersion(getUniqueId());
+        Integer playerVersion = Via.getAPI().getPlayerVersion(player.getUniqueId());
         return playerVersion;
     }
 
     public String getTeam() {
-        return ConfigHandler.getInstance().getTeamByUUID(getUniqueId());
+        return ConfigHandler.getInstance().getTeamByUUID(player.getUniqueId());
     }
 
     public Rank getRank() {
-        return RankProvider.getInstance().getRank(this);
+        return RankProvider.getInstance().getRank(player);
     }
 
     public String buildPrefix() {
-        return getRank().buildPrefix(this);
+        return getRank().buildPrefix(player);
     }
 
     public void deleteUserFile() {
-        ConfigHandler.getInstance().deleteUserFile(getUniqueId());
+        ConfigHandler.getInstance().deleteUserFile(player.getUniqueId());
     }
 
     @Override

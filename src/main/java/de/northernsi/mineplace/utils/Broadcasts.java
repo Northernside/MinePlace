@@ -9,7 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class Broadcasts {
     public static void runBroadcasts() {
         TextComponent mapMessage = new TextComponent();
-        mapMessage.setText("§e§lMine§6§lPlace §7» §fView our live world map at ");
+        mapMessage.setText("§e§lMine§6§lPlace §9» §7View our live world map at ");
 
         TextComponent mapLink = new TextComponent();
         mapLink.setText("§emap.mineplace.space");
@@ -17,7 +17,7 @@ public class Broadcasts {
         mapLink.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("§7Click to visit the live world map.").create()));
         mapMessage.addExtra(mapLink);
 
-        Broadcast liveMap = new Broadcast(mapMessage, 20L);
+        Broadcast liveMap = new Broadcast(mapMessage, (long) (10 * 60 * 20) /* 10 minutes */);
         liveMap.register();
     }
 }
