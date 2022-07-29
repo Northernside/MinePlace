@@ -8,14 +8,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wool;
 
 public class InventoryPages {
-
     public static void changePage(int page, Inventory pInv) {
         ItemStack cancelBtn = new ItemStack(Material.BARRIER, 1);
         ItemMeta cBMeta = cancelBtn.getItemMeta();
         cBMeta.setDisplayName("§cCancel");
         cancelBtn.setItemMeta(cBMeta);
-
         pInv.clear();
+
         switch (page) {
             case 0:
                 ItemStack nArrowP0 = new ItemStack(Material.ARROW, 1);
@@ -84,7 +83,7 @@ public class InventoryPages {
                 pIMeta.setDisplayName("§7Position");
                 posItem.setItemMeta(pIMeta);
 
-                ItemStack censorBtn = new ItemStack(Material.BLAZE_ROD, 1);
+                ItemStack censorBtn = new ItemStack(Material.LAVA_BUCKET, 1);
                 ItemMeta ceBMeta = censorBtn.getItemMeta();
                 ceBMeta.setDisplayName("§aCensor");
                 censorBtn.setItemMeta(ceBMeta);

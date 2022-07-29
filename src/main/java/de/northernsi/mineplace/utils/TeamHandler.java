@@ -3,6 +3,7 @@ package de.northernsi.mineplace.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.northernsi.mineplace.MinePlace;
 import de.northernsi.mineplace.types.Team;
 import de.northernsi.mineplace.types.TeamMember;
 import de.northernsi.mineplace.types.TeamRole;
@@ -10,17 +11,17 @@ import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import de.northernsi.mineplace.MinePlace;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TeamHandler {
-
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().setLenient().create();
 
     private final Map<String, Team> teams = new ConcurrentHashMap<>();
@@ -60,7 +61,7 @@ public class TeamHandler {
         team.getMembers().remove(targetMember);
     }
 
-    public void promoteToMod( String target) {
+    public void promoteToMod(String target) {
         setRole(target, TeamRole.MODERATOR);
     }
 
@@ -95,14 +96,14 @@ public class TeamHandler {
     }
 
     private void saveAllTeams() {
-        String path = MinePlace.getInstance().getDataFolder().getPath()+"data/teams";
+        String path = MinePlace.getInstance().getDataFolder().getPath() + "data/teams";
         teams.values().stream().forEach(this::saveTeam);
     }
 
     @SneakyThrows(IOException.class)
     private void saveTeam(Team team) {
-        String path = MinePlace.getInstance().getDataFolder().getPath()+"data/teams";
-        File file = new File(path+team.getName()+".json");
+        String path = MinePlace.getInstance().getDataFolder().getPath() + "data/teams";
+        File file = new File(path + team.getName() + ".json");
         if (file.exists()) {
             file.delete();
         }

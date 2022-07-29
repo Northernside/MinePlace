@@ -1,14 +1,13 @@
 package de.northernsi.mineplace.commands;
 
+import de.northernsi.mineplace.MinePlace;
 import de.northernsi.mineplace.utils.ConfigHandler;
-import de.northernsi.mineplace.utils.SubtitleUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import de.northernsi.mineplace.MinePlace;
 
 import java.util.UUID;
 
@@ -109,6 +108,11 @@ public class TeamCommand implements CommandExecutor {
                             return false;
                         }
 
+                        if (ConfigHandler.getInstance().getTeamByUUID(targetPlayer.getUniqueId()) != null) {
+                            player.sendMessage("§cThat player is already in a team!");
+                            return false;
+                        }
+
                         targetPlayer.sendMessage("§e" + player.getName() + " §ainvited you to join team §e#" + teamName + "§a.");
                         player.sendMessage("§aSuccessfully invited §e" + targetPlayer.getName() + " §ato join your team.");
 
@@ -128,13 +132,13 @@ public class TeamCommand implements CommandExecutor {
                         }
 
                         String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
-                        if (!tMRole.equals("mod") || !tMRole.equals("owner")) {
+                        if (!tMRole.equals("mod") && !tMRole.equals("owner")) {
                             player.sendMessage("§cYou don't have the permission to execute this command!");
                             return false;
                         }
 
                         if (tOPlayer == null) {
-                            player.sendMessage("§cThat player doesn't exist!");
+                            player.sendMessage("§cThat player isn't online at the moment!");
                             return false;
                         }
 
@@ -164,13 +168,13 @@ public class TeamCommand implements CommandExecutor {
                         }
 
                         String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
-                        if (!tMRole.equals("mod") || !tMRole.equals("owner")) {
+                        if (!tMRole.equals("mod") && !tMRole.equals("owner")) {
                             player.sendMessage("§cYou don't have the permission to execute this command!");
                             return false;
                         }
 
                         if (tOPlayer == null) {
-                            player.sendMessage("§cThat player doesn't exist!");
+                            player.sendMessage("§cThat player isn't online at the moment!");
                             return false;
                         }
 
@@ -203,7 +207,7 @@ public class TeamCommand implements CommandExecutor {
                         }
 
                         if (tOPlayer == null) {
-                            player.sendMessage("§cThat player doesn't exist!");
+                            player.sendMessage("§cThat player isn't online at the moment!");
                             return false;
                         }
 
@@ -224,9 +228,9 @@ public class TeamCommand implements CommandExecutor {
                             return false;
                         }
 
-                        if (teamName != null) {
+                        if (teamName == null) {
                             player.sendMessage("§cYou're not in a team!");
-                            return false;
+                            return true;
                         }
 
                         String tMRole = ConfigHandler.getInstance().getTeamMemberRole(teamName, pUUID);
@@ -236,7 +240,7 @@ public class TeamCommand implements CommandExecutor {
                         }
 
                         if (tOPlayer == null) {
-                            player.sendMessage("§cThat player doesn't exist!");
+                            player.sendMessage("§cThat player isn't online at the moment!");
                             return false;
                         }
 
@@ -272,10 +276,11 @@ public class TeamCommand implements CommandExecutor {
                             return false;
                         }
 
-                        ConfigHandler.getInstance().createTeam(args[1].replace("&", ""), pUUID);
-                        player.sendMessage("§aSuccessfully created team §e#" + args[1] + "§a.");
+                        teamName = args[1].replace("&", "");
+                        ConfigHandler.getInstance().createTeam(teamName, pUUID);
+                        player.sendMessage("§aSuccessfully created team §e#" + teamName + "§a.");
                         for (Player gop : Bukkit.getOnlinePlayers()) {
-                            SubtitleUtils.setSubtitle(gop, player.getUniqueId(), teamName.replace("&", ""));
+                            SubtitleUtils.setSubtitle(gop, player.getUniqueId(), teamName);
                         }
 
                         return false;

@@ -5,6 +5,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,6 +38,8 @@ public class PlayerCommandPreProcessListener implements Listener {
                 event.getPlayer().sendMessage("§cThis command is not available on§r §eMine§6Place§c.");
                 break;
             case "/help":
+            case "/minecraft:help":
+            case "/bukkit:help":
             case "/h":
             case "/?":
             case "/commands":
@@ -46,12 +49,19 @@ public class PlayerCommandPreProcessListener implements Listener {
                 event.setCancelled(true);
                 sendHelpCMD(event.getPlayer());
                 break;
+            case "/msg":
+            case "/tell":
+            case "/minecraft:msg":
+            case "/minecraft:tell":
+                event.setCancelled(true);
+                executeMSG(event.getPlayer(), event.getMessage());
+                break;
         }
     }
 
     private void sendVersionCMD(Player player) {
         TextComponent srcMessage = new TextComponent();
-        srcMessage.setText("§7The source code is completely available on");
+        srcMessage.setText("§7The source code is completely available on ");
 
         TextComponent srcLink = new TextComponent();
         srcLink.setText("§egithub.com/Northernside/MinePlace");
@@ -91,6 +101,20 @@ public class PlayerCommandPreProcessListener implements Listener {
 
         player.spigot().sendMessage(moreInfo);
         player.spigot().sendMessage(websiteInfo);
+    }
 
+    private void executeMSG(Player player, String content) {
+        String[] args = content.split(" ");
+        String targetUsername = args[1];
+        String message = content.replace(args[0] + " " + args[1] + " ", "");
+
+        Player target = Bukkit.getPlayer(targetUsername);
+        if (target == null) {
+            player.sendMessage("§cThe player §e" + targetUsername + "§c is not online.");
+            return;
+        }
+
+        target.sendMessage("§8[§6MSG§8] §7" + player.getName() + " §8§l⇢ §7You §8> §f" + message);
+        player.sendMessage("§8[§6MSG§8] §7You §8§l⇢ §7" + target.getName() + " §8> §f" + message);
     }
 }

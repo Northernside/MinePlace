@@ -1,8 +1,11 @@
 // Created by Torben R.
 package de.northernsi.mineplace.types;
 
-public enum Rank {
+import org.bukkit.entity.Player;
 
+import java.util.List;
+
+public enum Rank {
     ADMIN(1),
     DEV(2),
     MOD(3),
@@ -29,6 +32,31 @@ public enum Rank {
                 return GUEST;
         }
         return GUEST;
+    }
+
+    public static List<String> getRanks() {
+        List<String> ranks = new java.util.ArrayList<>();
+        for (Rank rank : values()) {
+            ranks.add(rank.name());
+        }
+
+        return ranks;
+    }
+
+    public String buildPrefix(Player player) {
+        switch (this) {
+            case ADMIN:
+                return "§cAdmin §7" + player.getName() + " §8⇾ §f";
+            case DEV:
+                return "§bDev §7" + player.getName() + " §8⇾ §f";
+            case MOD:
+                return "§6Mod §7" + player.getName() + " §8⇾ §f";
+            case VIP:
+                return "§dVIP §7" + player.getName() + " §8⇾ §f";
+            case GUEST:
+                return "§7" + player.getName() + " §8⇾ §f";
+        }
+        return "§7" + player.getName() + " §8⇾ §f";
     }
 
     public int getId() {

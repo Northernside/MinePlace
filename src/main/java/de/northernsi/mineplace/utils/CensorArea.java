@@ -1,11 +1,10 @@
+// Credits: unordentlich <3
 package de.northernsi.mineplace.utils;
-
 
 import org.bukkit.Location;
 import org.bukkit.World;
 
 public class CensorArea {
-
     Location loc1;
     Location loc2;
 

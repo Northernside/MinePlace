@@ -2,11 +2,11 @@ package de.northernsi.mineplace.listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 
-public class BlockPlaceListener implements Listener {
+public class PotionSplashListener implements Listener {
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
+    public void onPotionSplash(PotionSplashEvent event) {
         event.setCancelled(true);
     }
 }

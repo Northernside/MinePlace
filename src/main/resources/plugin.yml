@@ -1,5 +1,5 @@
 name: MinePlace
-version: 1.3
+version: 1.4
 authors:
   - Northernside
   - unordentlich
@@ -8,7 +8,7 @@ authors:
   - InspectorRex
 main: de.northernsi.mineplace.MinePlace
 description: MinePlace offers a completely new gaming experience in Minecraft. As a parody of r/place, a world-renowned reddit community project, this project offers endless possibilities to immortalise one's creativity in MinePlace, in addition to many varied features such as joining game teams or a large number of colours.
-depend: [ProtocolLib]
+depend: [ ProtocolLib ]
 
 commands:
   ping:

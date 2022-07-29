@@ -12,7 +12,6 @@ import java.util.UUID;
 @Getter
 @AllArgsConstructor
 public class Team {
-
     String name;
     List<TeamMember> members;
     List<UUID> bannedPlayers;

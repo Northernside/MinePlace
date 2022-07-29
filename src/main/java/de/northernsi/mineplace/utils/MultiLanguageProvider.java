@@ -5,9 +5,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import de.northernsi.mineplace.MinePlace;
 import lombok.SneakyThrows;
 import org.bukkit.entity.Player;
-import de.northernsi.mineplace.MinePlace;
 
 import java.io.File;
 import java.io.FileReader;
@@ -20,10 +20,10 @@ public class MultiLanguageProvider {
     private static final Gson GSON = new GsonBuilder().setLenient().setPrettyPrinting().create();
     private static final JsonParser PARSER = new JsonParser();
     private static MultiLanguageProvider instance;
+    private static JsonObject jsonObject = new JsonObject();
     private final File dir = new File(MinePlace.getInstance().getDataFolder().getPath() + "data/lang/");
     private final File selectedLanguagesFile = new File(dir + "selected.json");
     private final Map<String, Properties> languages = new HashMap<>();
-    private static JsonObject jsonObject = new JsonObject();
 
     @SneakyThrows
     public MultiLanguageProvider() {
@@ -32,6 +32,14 @@ public class MultiLanguageProvider {
         }
         jsonObject = (JsonObject) PARSER.parse(GSON.newJsonReader(new FileReader(selectedLanguagesFile)));
         loadLanguages();
+    }
+
+    public static MultiLanguageProvider getInstance() {
+        if (MultiLanguageProvider.instance == null) {
+            MultiLanguageProvider.instance = new MultiLanguageProvider();
+        }
+
+        return MultiLanguageProvider.instance;
     }
 
     public String getLang(Player player) {
@@ -64,13 +72,5 @@ public class MultiLanguageProvider {
             }
             languages.put(file.getName(), properties);
         });
-    }
-
-    public static MultiLanguageProvider getInstance() {
-        if (MultiLanguageProvider.instance == null) {
-            MultiLanguageProvider.instance = new MultiLanguageProvider();
-        }
-
-        return MultiLanguageProvider.instance;
     }
 }

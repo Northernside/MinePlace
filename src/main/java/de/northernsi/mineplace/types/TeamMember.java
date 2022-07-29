@@ -13,7 +13,6 @@ import java.util.UUID;
 @Getter
 @Setter
 public class TeamMember {
-
     UUID uuid;
     String teamname;
     TeamRole role;

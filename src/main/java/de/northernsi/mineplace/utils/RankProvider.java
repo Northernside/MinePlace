@@ -1,32 +1,31 @@
 // Created by Torben R.
 package de.northernsi.mineplace.utils;
 
+import de.northernsi.mineplace.MinePlace;
+import de.northernsi.mineplace.types.Rank;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import de.northernsi.mineplace.MinePlace;
-import de.northernsi.mineplace.types.Rank;
 
 import java.io.File;
 import java.io.IOException;
 
 public class RankProvider {
-
     private static RankProvider instance;
     private final File file = new File(MinePlace.getInstance().getDataFolder().getPath(), "ranks.yml");
     private final YamlConfiguration yamlConfiguration;
+
+    public RankProvider() {
+        instance = this;
+        this.yamlConfiguration = YamlConfiguration.loadConfiguration(file);
+    }
 
     public static RankProvider getInstance() {
         if (instance == null) {
             return new RankProvider();
         }
         return instance;
-    }
-
-    public RankProvider() {
-        instance = this;
-        this.yamlConfiguration = YamlConfiguration.loadConfiguration(file);
     }
 
     public Rank getRank(Player player) {

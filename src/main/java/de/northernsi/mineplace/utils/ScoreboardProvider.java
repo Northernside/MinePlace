@@ -1,3 +1,4 @@
+// Credits: Zeichenfolge
 package de.northernsi.mineplace.utils;
 
 import de.northernsi.mineplace.types.Rank;
@@ -24,6 +25,14 @@ public class ScoreboardProvider {
         scoreboard.getTeam("05Guest").setPrefix("§7");
     }
 
+    public static ScoreboardProvider getInstance() {
+        if (ScoreboardProvider.instance == null) {
+            ScoreboardProvider.instance = new ScoreboardProvider();
+        }
+
+        return ScoreboardProvider.instance;
+    }
+
     public void setScoreboard() {
         for (Player all : Bukkit.getOnlinePlayers()) {
             setTeams(all);
@@ -37,9 +46,9 @@ public class ScoreboardProvider {
         if (RankProvider.getInstance().getRank(player) == Rank.ADMIN) {
             team = "01Admin";
         } else if (RankProvider.getInstance().getRank(player) == Rank.DEV) {
-            team ="02Dev";
+            team = "02Dev";
         } else if (RankProvider.getInstance().getRank(player) == Rank.MOD) {
-            team ="03Mod";
+            team = "03Mod";
         } else if (RankProvider.getInstance().getRank(player) == Rank.VIP) {
             team = "04VIP";
         } else {
@@ -48,13 +57,5 @@ public class ScoreboardProvider {
 
         scoreboard.getTeam(team).addPlayer(player);
         player.setScoreboard(scoreboard);
-    }
-
-    public static ScoreboardProvider getInstance() {
-        if (ScoreboardProvider.instance == null) {
-            ScoreboardProvider.instance = new ScoreboardProvider();
-        }
-
-        return ScoreboardProvider.instance;
     }
 }

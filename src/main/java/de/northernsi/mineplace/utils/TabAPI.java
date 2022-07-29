@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 
-public class TabUtils {
+public class TabAPI {
     public static void setTab(Player player, String headerText, String footerText) {
         PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
         IChatBaseComponent header = IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + headerText.replace('&', '§') + "\"}");

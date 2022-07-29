@@ -1,8 +1,10 @@
+// Credits: Zeichenfolge
 package de.northernsi.mineplace.utils;
+
+import de.northernsi.mineplace.MinePlace;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import de.northernsi.mineplace.MinePlace;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +18,7 @@ public class ConfigHandler {
         if (ConfigHandler.instance == null) {
             ConfigHandler.instance = new ConfigHandler();
         }
-        
+
         return ConfigHandler.instance;
     }
 
@@ -79,14 +81,14 @@ public class ConfigHandler {
     }
 
     public void removeTeamMember(String teamName, UUID pUUID) {
-        File file = new File(pluginDirPath, "teams/" + teamName + ".yml");
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        File teamFile = new File(pluginDirPath, "teams/" + teamName + ".yml");
+        FileConfiguration teamCfg = YamlConfiguration.loadConfiguration(teamFile);
 
-        ConfigurationSection membersSection = cfg.getConfigurationSection("members");
+        ConfigurationSection membersSection = teamCfg.getConfigurationSection("members");
         membersSection.set(String.valueOf(pUUID), null);
 
         try {
-            cfg.save(file);
+            teamCfg.save(teamFile);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

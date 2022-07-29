@@ -1,3 +1,4 @@
+// Credits: https://docs.labymod.net/pages/server/protocol/protocol/
 package de.northernsi.mineplace.utils;
 
 import com.google.gson.JsonElement;
