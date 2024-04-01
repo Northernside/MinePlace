@@ -12,7 +12,7 @@ MinePlace offers a completely new gaming experience in Minecraft. As a parody of
 a world-renowned reddit community project, this project offers endless possibilities to immortalise one's creativity in
 MinePlace, in addition to many varied features such as joining game teams or a large number of colours.
 
-![heart](https://raw.githubusercontent.com/Northernside/MinePlace/main/.github/raw/heart.png)
+![heart](https://raw.githubusercontent.com/Northernside/MinePlace/main/.github/raw/heart.png) 
 
 Whether alone or as a duo, in one or many colours, in the morning or in the evening and whether Pokemon, Emoji or your
 own skin, MinePlace sets no limits and gives free rein to your creativity!
