@@ -1,5 +1,5 @@
 > [!WARNING]
-> This project has not been maintained for over a year and there are no plans for further development. The included code is partly unfinished and unbelievable sh*t, due to my lack of knowledge back in 2022.
+> This project has not been maintained for over a year and there are no plans for further development. The included code is partly unfinished and unbelievablely bad due to my lack of knowledge back in 2022.
 
 <br>
   <div align="center">
